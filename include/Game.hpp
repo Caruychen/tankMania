@@ -3,6 +3,7 @@
 
 # include <SFML/Graphics.hpp>
 
+# define FRAME_RATE_LIMIT 60
 # define MAP_WIDTH 1024
 # define MAP_HEIGHT 512
 
