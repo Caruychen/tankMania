@@ -1,21 +1,26 @@
 #include <SFML/Graphics.hpp>
+#include "Map.hpp"
+#include <iostream>
 
 int main()
 {
-    auto window = sf::RenderWindow{ { 1920u, 1080u }, "CMake SFML Project" };
-    window.setFramerateLimit(144);
+  sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "Tank Blast!");
 
-    while (window.isOpen())
-    {
-        for (auto event = sf::Event{}; window.pollEvent(event);)
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-            }
-        }
+  Map map("assets/maps/map_00.txt");
+  map.load();
+  while (window.isOpen())
+  {
+      sf::Event event;
+      while (window.pollEvent(event))
+      {
+          if (event.type == sf::Event::Closed)
+              window.close();
+      }
 
-        window.clear();
-        window.display();
-    }
+      window.clear();
+      window.draw(map);
+      window.display();
+  }
+
+  return 0;
 }
