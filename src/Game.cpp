@@ -36,6 +36,7 @@ void Game::pollEvents()
 
 void Game::update()
 {
+  /* Updates game state */
   this->pollEvents();
 }
 
@@ -61,4 +62,5 @@ void Game::_initWindow()
     "Tank Mania!",
     sf::Style::Titlebar | sf::Style::Close
   );
+  this->_window->setFramerateLimit(FRAME_RATE_LIMIT);
 }
