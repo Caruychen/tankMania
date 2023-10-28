@@ -1,25 +1,18 @@
-#include <SFML/Graphics.hpp>
-#include "Map.hpp"
-#include <iostream>
+#include "Game.hpp"
 
 int main()
 {
-  sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "Tank Blast!");
+  // Init game engine
+  Game game;
 
-  Map map("assets/maps/map_00.txt");
-  map.load();
-  while (window.isOpen())
+  // Event polling
+  while (game.running())
   {
-      sf::Event event;
-      while (window.pollEvent(event))
-      {
-          if (event.type == sf::Event::Closed)
-              window.close();
-      }
+    // Update
+    game.update();
 
-      window.clear();
-      window.draw(map);
-      window.display();
+    // Rendering
+    game.render();
   }
 
   return 0;

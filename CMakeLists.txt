@@ -17,10 +17,12 @@ set(INCLUDE_DIR
 )
 set(HEADER_FILES
   include/map/Map.hpp
+  include/Game.hpp
 )
 
 set(SOURCE_FILES
   src/main.cpp
+  src/Game.cpp
   src/map/Map.cpp
 )
 

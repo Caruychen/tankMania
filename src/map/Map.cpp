@@ -1,7 +1,6 @@
 #include <cmath>
 #include <SFML/System.hpp>
 #include "Map.hpp"
-#include <iostream>
 
 Map::Map(const std::string& mapFile)
 {
@@ -65,6 +64,4 @@ void Map::readMap(const std::string& mapFile)
       continue;
     this->m_data.push_back(buffer[0] - '0');
   }
-  std::cout << "Map size: " << this->m_data.size() << std::endl;
-  std::cout << sqrt(this->m_data.size() / 2) << std::endl;
 }
