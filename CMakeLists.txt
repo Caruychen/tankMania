@@ -13,7 +13,6 @@ FetchContent_MakeAvailable(SFML)
 
 set(INCLUDE_DIR
   include
-  include/EventManager
   include/map
   include/tanks
 )
@@ -21,16 +20,12 @@ set(HEADER_FILES
   include/Window.hpp
   include/map/Map.hpp
   include/Game.hpp
-  include/EventManager/EventUtils.hpp
-  include/EventManager/EventManager.hpp
 )
 
 set(SOURCE_FILES
   src/main.cpp
   src/Window.cpp
   src/Game.cpp
-  src/EventManager/EventUtils.cpp
-  src/EventManager/EventManager.cpp
   src/map/Map.cpp
 )
 
@@ -40,7 +35,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/config DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 if(WIN32)
     add_custom_command(
