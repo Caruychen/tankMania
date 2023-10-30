@@ -1,16 +1,21 @@
 #include "Game.hpp"
+#include "Tank.hpp"
 #include <iostream>
 
 // Constructors & Destructors
 Game::Game(): m_window("Tank Mania!", sf::Vector2u(800, 600))
 {
-  m_tankTexture.loadFromFile("assets/tanks/blueTank.png");
-  m_tank.setTexture(m_tankTexture);
-  m_increment = sf::Vector2i(400, 400);
+  this->m_tank = new Tank(
+    "Tank",
+    "assets/tanks/blueTank.png",
+    sf::Vector2f(0, 0),
+    &this->m_elapsed);
 }
 
 Game::~Game()
-{}
+{
+  delete this->m_tank;
+}
 
 // Accessors
 const bool Game::running() const
@@ -29,19 +34,16 @@ sf::Time Game::getElapsed()
 }
 
 // Public Functions
-void Game::handleInput()
-{}
-
 void Game::update()
 {
   this->m_window.update();
-  this->_moveTank();
+  this->m_tank->handleInput();
 }
 
 void Game::render()
 {
   this->m_window.beginDraw();
-  this->m_window.draw(this->m_tank);
+  this->m_window.draw(*this->m_tank);
   this->m_window.endDraw();
 }
 
@@ -51,6 +53,7 @@ void Game::restartClock()
 }
 
 // Private methods
+/*
 void Game::_moveTank()
 {
   sf::Vector2u windowSize = this->m_window.getWindowSize();
@@ -67,3 +70,4 @@ void Game::_moveTank()
     this->m_tank.getPosition().x + (m_increment.x * timeElapsed),
     this->m_tank.getPosition().y + (m_increment.y * timeElapsed));
 }
+*/

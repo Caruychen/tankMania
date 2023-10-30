@@ -14,12 +14,14 @@ FetchContent_MakeAvailable(SFML)
 set(INCLUDE_DIR
   include
   include/map
-  include/tanks
+  include/entities
 )
 set(HEADER_FILES
   include/Window.hpp
   include/map/Map.hpp
   include/Game.hpp
+  include/entities/Entity.hpp
+  include/entities/Tank.hpp
 )
 
 set(SOURCE_FILES
@@ -27,6 +29,8 @@ set(SOURCE_FILES
   src/Window.cpp
   src/Game.cpp
   src/map/Map.cpp
+  src/entities/Entity.cpp
+  src/entities/Tank.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
