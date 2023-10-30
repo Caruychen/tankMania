@@ -14,14 +14,17 @@ FetchContent_MakeAvailable(SFML)
 set(INCLUDE_DIR
   include
   include/map
+  include/tanks
 )
 set(HEADER_FILES
+  include/Window.hpp
   include/map/Map.hpp
   include/Game.hpp
 )
 
 set(SOURCE_FILES
   src/main.cpp
+  src/Window.cpp
   src/Game.cpp
   src/map/Map.cpp
 )

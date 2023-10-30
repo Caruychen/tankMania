@@ -2,8 +2,8 @@
 # define GAME_HPP
 
 # include <SFML/Graphics.hpp>
+# include "Window.hpp"
 
-# define FRAME_RATE_LIMIT 60
 # define MAP_WIDTH 1024
 # define MAP_HEIGHT 512
 
@@ -16,23 +16,29 @@ class Game
   public:
     // Constructor / Destructor
     Game();
-    virtual ~Game();
+    ~Game();
 
-    // Accessorsj
+    // Accessors
     const bool running() const;
+    Window* getWindow();
+    sf::Time getElapsed();
 
     // Functions
-    void pollEvents();
+    void handleInput();
     void update();
     void render();
-
+    void restartClock();
 
   private:
-    void              _initVariables();
-    void              _initWindow();
-    sf::RenderWindow  *_window;
-    sf::VideoMode     _videoMode;
-    sf::Event         _event;
+    void  _moveTank();
+
+    Window m_window;
+    sf::Clock m_clock;
+    sf::Time m_elapsed;
+    sf::Texture m_tankTexture;
+    sf::Sprite m_tank;
+    sf::Vector2i m_increment;
+
 };
 
 #endif

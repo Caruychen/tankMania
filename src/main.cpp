@@ -13,6 +13,7 @@ int main()
 
     // Rendering
     game.render();
+    game.restartClock();
   }
 
   return 0;
