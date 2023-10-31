@@ -47,20 +47,10 @@ void Entity::rotateRight()
   this->m_sprite.rotate(this->_getRotationSpeed());
 }
 
-void Entity::boundInArena(const Arena &arena)
+void Entity::updateBounds(const Arena &arena)
 {
-  sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
-  const float widthOffset = spriteBounds.width / 2 + BOUNDING_BUFFER;
-  const sf::Vector2f &pos = this->m_sprite.getPosition();
-
-  if (spriteBounds.left < 0)
-    this->m_sprite.setPosition(widthOffset, pos.y);
-  else if (spriteBounds.left + spriteBounds.width > arena.getSize().x)
-    this->m_sprite.setPosition(arena.getSize().x - widthOffset, pos.y);
-  if (spriteBounds.top < 0)
-    this->m_sprite.setPosition(pos.x, widthOffset);
-  else if (spriteBounds.top + spriteBounds.height > arena.getSize().y)
-    this->m_sprite.setPosition(pos.x, arena.getSize().y - widthOffset);
+  this->_boundInArena(arena);
+  this->_boundAgainstWalls(arena);
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -81,4 +71,76 @@ const float Entity::_getRotationSpeed() const
 const float Entity::_getAngleRadians() const
 {
   return this->m_sprite.getRotation() * M_PI / 180;
+}
+
+void Entity::_boundInArena(const Arena &arena)
+{
+  sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
+  const float widthOffset = spriteBounds.width / 2 + BOUNDING_BUFFER;
+  const float heightOffset = spriteBounds.height / 2 + BOUNDING_BUFFER;
+  const sf::Vector2f &pos = this->m_sprite.getPosition();
+
+  if (spriteBounds.left < 0)
+    this->m_sprite.setPosition(widthOffset, pos.y);
+  else if (spriteBounds.left + spriteBounds.width > arena.getSize().x)
+    this->m_sprite.setPosition(arena.getSize().x - widthOffset, pos.y);
+  if (spriteBounds.top < 0)
+    this->m_sprite.setPosition(pos.x, heightOffset);
+  else if (spriteBounds.top + spriteBounds.height > arena.getSize().y)
+    this->m_sprite.setPosition(pos.x, arena.getSize().y - heightOffset);
+}
+
+void Entity::_boundAgainstWalls(const Arena &arena)
+{
+  sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
+  const float widthOffset = spriteBounds.width / 2 + BOUNDING_BUFFER;
+  const float heightOffset = spriteBounds.height / 2 + BOUNDING_BUFFER;
+  const sf::Vector2f &pos = this->m_sprite.getPosition();
+  const std::vector<sf::FloatRect> arenaWalls = arena.getWalls();
+  float widthOverlap;
+  float heightOverlap;
+
+  for (sf::FloatRect wall: arenaWalls)
+  {
+    if (wall.contains(spriteBounds.left, spriteBounds.top))
+    {
+      std::cout << "test" << std::endl;
+      widthOverlap = wall.left + wall.width - spriteBounds.left;
+      heightOverlap = wall.top + wall.height - spriteBounds.top;
+      if (widthOverlap < heightOverlap)
+        this->m_sprite.setPosition(wall.left + wall.width + widthOffset, pos.y);
+      else 
+        this->m_sprite.setPosition(pos.x, wall.top + wall.height + heightOffset);
+    }
+    else if (wall.contains(spriteBounds.left, spriteBounds.top + spriteBounds.height))
+    {
+      std::cout << "test" << std::endl;
+      widthOverlap = wall.left + wall.width - spriteBounds.left;
+      heightOverlap = spriteBounds.top + spriteBounds.height - wall.top;
+      if (widthOverlap < heightOverlap)
+        this->m_sprite.setPosition(wall.left + wall.width + widthOffset, pos.y);
+      else
+        this->m_sprite.setPosition(pos.x, wall.top - heightOffset);
+    }
+    else if (wall.contains(spriteBounds.left + spriteBounds.width, spriteBounds.top))
+    {
+      std::cout << "test" << std::endl;
+      widthOverlap = spriteBounds.left + spriteBounds.width - wall.left;
+      heightOverlap = wall.top + wall.height - spriteBounds.top;
+      if (widthOverlap < heightOverlap)
+        this->m_sprite.setPosition(wall.left - widthOffset, pos.y);
+      else
+        this->m_sprite.setPosition(pos.x, wall.top + wall.height + heightOffset);
+    }
+    else if (wall.contains(spriteBounds.left + spriteBounds.width, spriteBounds.top + spriteBounds.height))
+    {
+      std::cout << "test" << std::endl;
+      widthOverlap = spriteBounds.left + spriteBounds.width - wall.left;
+      heightOverlap = spriteBounds.top + spriteBounds.height - wall.top;
+      if (widthOverlap < heightOverlap)
+        this->m_sprite.setPosition(wall.left - widthOffset, pos.y);
+      else
+        this->m_sprite.setPosition(pos.x, wall.top - heightOffset);
+    }
+  }
 }

@@ -29,7 +29,7 @@ void Player::handleInput(const Arena &arena)
     this->rotateLeft();
   else if (sf::Keyboard::isKeyPressed(this->m_right))
     this->rotateRight();
-  this->boundInArena(arena);
+  this->updateBounds(arena);
 }
 
 void Player::_setupKeyBindings()

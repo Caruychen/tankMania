@@ -24,6 +24,11 @@ const sf::Vector2u Arena::getSize() const
   return (size);
 }
 
+const std::vector<sf::FloatRect> Arena::getWalls() const
+{
+  return this->m_walls;
+}
+
 void Arena::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(m_vertices, states);

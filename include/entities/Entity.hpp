@@ -23,13 +23,15 @@ class Entity : public sf::Drawable
     void rotateLeft();
     void rotateRight();
     //bool isColliding(const Entity &other) const;
-    void boundInArena(const Arena &arena);
+    void updateBounds(const Arena &arena);
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     const float _getMoveSpeed() const;
     const float _getRotationSpeed() const;
     const float _getAngleRadians() const;
+    void _boundInArena(const Arena &arena);
+    void _boundAgainstWalls(const Arena &arena);
 
   protected:
     std::string m_name;

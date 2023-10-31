@@ -13,6 +13,7 @@ class Arena : public sf::Drawable
     ~Arena();
     void load(void);
     const sf::Vector2u getSize() const;
+    const std::vector<sf::FloatRect> getWalls() const;
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
