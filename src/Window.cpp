@@ -94,6 +94,7 @@ void Window::_create()
     this->m_windowTitle,
     style
   );
+  this->m_window.setFramerateLimit(FRAME_RATE_LIMIT);
 }
 
 void Window::_destroy()
