@@ -4,9 +4,7 @@
 # include <SFML/Graphics.hpp>
 # include "Window.hpp"
 # include "Player.hpp"
-
-# define MAP_WIDTH 1024
-# define MAP_HEIGHT 512
+# include "Arena.hpp"
 
 /*
 * Game class acts as basic game engine.
@@ -33,6 +31,7 @@ class Game
     void _setupPlayers();
 
     Window m_window;
+    Arena m_arena;
     sf::Clock m_clock;
     sf::Time m_elapsed;
     std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> m_players;

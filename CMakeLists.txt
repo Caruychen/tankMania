@@ -13,13 +13,12 @@ FetchContent_MakeAvailable(SFML)
 
 set(INCLUDE_DIR
   include
-  include/map
   include/entities
 )
 set(HEADER_FILES
   include/Window.hpp
-  include/map/Map.hpp
   include/Game.hpp
+  include/Arena.hpp
   include/entities/Entity.hpp
   include/entities/Tank.hpp
   include/entities/Player.hpp
@@ -29,7 +28,7 @@ set(SOURCE_FILES
   src/main.cpp
   src/Window.cpp
   src/Game.cpp
-  src/map/Map.cpp
+  src/Arena.cpp
   src/entities/Entity.cpp
   src/entities/Tank.cpp
   src/entities/Player.cpp

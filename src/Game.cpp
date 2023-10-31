@@ -1,11 +1,13 @@
 #include "Game.hpp"
-#include "Player.hpp"
 #include <iostream>
 
 // Constructors & Destructors
-Game::Game(): m_window("Tank Mania!", sf::Vector2u(1200, 675))
+Game::Game(): 
+  m_window("Tank Mania!", sf::Vector2u(1200, 675)),
+  m_arena(Arena("assets/maps/map_00.txt"))
 {
   this->_setupPlayers();
+  this->m_arena.load();
 }
 
 Game::~Game()
@@ -38,6 +40,7 @@ void Game::update()
 void Game::render()
 {
   this->m_window.beginDraw();
+  this->m_window.draw(this->m_arena);
   this->m_window.draw(*this->m_players.first);
   this->m_window.draw(*this->m_players.second);
   this->m_window.endDraw();
