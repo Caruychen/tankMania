@@ -5,6 +5,7 @@ Entity::Entity(
   const std::string &name,
   const std::string &texturePath,
   const sf::Vector2f &pos,
+  const sf::Vector2f &scale,
   const int &incrementSpeed,
   sf::Time *elapsed) :
   m_name(name), m_incrementSpeed(incrementSpeed), m_rotationSpeed(200), m_elapsed(elapsed)
@@ -15,6 +16,21 @@ Entity::Entity(
   this->m_sprite.setOrigin(
     this->m_texture.getSize().x / 2,
     this->m_texture.getSize().y / 2);
+  this->m_sprite.setScale(scale.x, scale.y);
+  sf::Vector2f origin = this->m_sprite.getOrigin();
+  sf::FloatRect rect = this->m_sprite.getLocalBounds();
+  origin.x *= scale.x;
+  origin.y *= scale.y;
+  rect.width *= scale.x;
+  rect.height *= scale.y;
+  this->m_lRelativeCorners.push_back({rect.left - origin.x, rect.top - origin.y});
+  this->m_lRelativeCorners.push_back({rect.width - origin.x, rect.top - origin.y});
+  this->m_lRelativeCorners.push_back({rect.left - origin.x, rect.height - origin.y});
+  this->m_lRelativeCorners.push_back({rect.width - origin.x, rect.height - origin.y});
+  this->m_globalCorners.push_back({rect.left - origin.x, rect.top - origin.y});
+  this->m_globalCorners.push_back({rect.width - origin.x, rect.top - origin.y});
+  this->m_globalCorners.push_back({rect.left - origin.x, rect.height - origin.y});
+  this->m_globalCorners.push_back({rect.width - origin.x, rect.height - origin.y});
 }
 
 Entity::~Entity()
@@ -26,6 +42,7 @@ void Entity::moveForward()
   float x = sin(angle) * this->_getMoveSpeed();
   float y = cos(angle) * this->_getMoveSpeed();
   this->m_sprite.move(x, -y);
+  this->_updateGlobalCorners();
 }
 
 void Entity::moveBackward()
@@ -35,16 +52,19 @@ void Entity::moveBackward()
   float x = sin(angle) * this->_getMoveSpeed();
   float y = cos(angle) * this->_getMoveSpeed();
   this->m_sprite.move(-x, y);
+  this->_updateGlobalCorners();
 }
 
 void Entity::rotateLeft()
 {
   this->m_sprite.rotate(-this->_getRotationSpeed());
+  this->_updateGlobalCorners();
 }
 
 void Entity::rotateRight()
 {
   this->m_sprite.rotate(this->_getRotationSpeed());
+  this->_updateGlobalCorners();
 }
 
 void Entity::updateBounds(const Arena &arena)
@@ -71,6 +91,19 @@ const float Entity::_getRotationSpeed() const
 const float Entity::_getAngleRadians() const
 {
   return this->m_sprite.getRotation() * M_PI / 180;
+}
+
+void Entity::_updateGlobalCorners(void)
+{
+  const sf::Vector2f pos = this->m_sprite.getPosition();
+  const float angle = this->_getAngleRadians();
+  const std::vector<vec2d> lCorners = this->m_lRelativeCorners;
+
+  for (int index = 0; index < this->m_globalCorners.size(); ++index)
+  {
+    this->m_globalCorners[index].x = lCorners[index].x * cos(angle) - lCorners[index].y * sin(angle);
+    this->m_globalCorners[index].y = lCorners[index].x * sin(angle) + lCorners[index].y * cos(angle);
+  }
 }
 
 void Entity::_boundInArena(const Arena &arena)
@@ -102,9 +135,10 @@ void Entity::_boundAgainstWalls(const Arena &arena)
 
   for (sf::FloatRect wall: arenaWalls)
   {
+    if (!wall.intersects(spriteBounds))
+      continue;
     if (wall.contains(spriteBounds.left, spriteBounds.top))
     {
-      std::cout << "test" << std::endl;
       widthOverlap = wall.left + wall.width - spriteBounds.left;
       heightOverlap = wall.top + wall.height - spriteBounds.top;
       if (widthOverlap < heightOverlap)
@@ -114,7 +148,6 @@ void Entity::_boundAgainstWalls(const Arena &arena)
     }
     else if (wall.contains(spriteBounds.left, spriteBounds.top + spriteBounds.height))
     {
-      std::cout << "test" << std::endl;
       widthOverlap = wall.left + wall.width - spriteBounds.left;
       heightOverlap = spriteBounds.top + spriteBounds.height - wall.top;
       if (widthOverlap < heightOverlap)
@@ -124,7 +157,6 @@ void Entity::_boundAgainstWalls(const Arena &arena)
     }
     else if (wall.contains(spriteBounds.left + spriteBounds.width, spriteBounds.top))
     {
-      std::cout << "test" << std::endl;
       widthOverlap = spriteBounds.left + spriteBounds.width - wall.left;
       heightOverlap = wall.top + wall.height - spriteBounds.top;
       if (widthOverlap < heightOverlap)
@@ -134,7 +166,6 @@ void Entity::_boundAgainstWalls(const Arena &arena)
     }
     else if (wall.contains(spriteBounds.left + spriteBounds.width, spriteBounds.top + spriteBounds.height))
     {
-      std::cout << "test" << std::endl;
       widthOverlap = spriteBounds.left + spriteBounds.width - wall.left;
       heightOverlap = spriteBounds.top + spriteBounds.height - wall.top;
       if (widthOverlap < heightOverlap)
@@ -144,3 +175,23 @@ void Entity::_boundAgainstWalls(const Arena &arena)
     }
   }
 }
+
+/*
+const bool Entity::_test(sf::FloatRect wall)
+{
+  const Vector2f pos = this->m_sprite.getPosition();
+  std::vector<vec2d> gPoints; // Sprite points in global position
+  for (vec2d localCorner: this->m_localCorners)
+  {
+    gPoints.push_back({ localCorner.x * cos(angle), });
+  }
+}
+
+const bool Entity::_isOverlapWall(const Arena &arena) const
+{
+  for (sf::FloatRect wall: arenaWalls)
+  {
+    bool res = _test(wall);
+  }
+}
+*/

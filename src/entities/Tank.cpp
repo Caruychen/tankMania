@@ -6,10 +6,8 @@ Tank::Tank(
   const sf::Vector2f &pos,
   const int &incrementSpeed,
   sf::Time *elapsed) :
-  Entity(name, texturePath, pos, incrementSpeed, elapsed)
-{
-  this->m_sprite.setScale(0.3f, 0.3f);
-}
+  Entity(name, texturePath, pos, sf::Vector2f(0.3f, 0.3f), incrementSpeed, elapsed)
+{}
 
 Tank::~Tank()
 {}
