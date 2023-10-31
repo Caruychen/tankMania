@@ -3,6 +3,7 @@
 
 # include <string>
 # include <SFML/Graphics.hpp>
+# include "Window.hpp"
 
 class Entity : public sf::Drawable
 {
@@ -11,6 +12,7 @@ class Entity : public sf::Drawable
       const std::string &name,
       const std::string &texturePath,
       const sf::Vector2f &pos,
+      const int &incrementSpeed,
       sf::Time *elapsed);
     ~Entity();
 
@@ -18,6 +20,8 @@ class Entity : public sf::Drawable
     void moveBackward();
     void rotateLeft();
     void rotateRight();
+    //bool isColliding(const Entity &other) const;
+    void boundInWindow(const Window &window);
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -25,6 +29,7 @@ class Entity : public sf::Drawable
     const float _getRotationSpeed() const;
     const float _getAngleRadians() const;
 
+  protected:
     std::string m_name;
     sf::Texture m_texture;
     sf::Sprite m_sprite;

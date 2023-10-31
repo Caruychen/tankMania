@@ -4,14 +4,20 @@ Tank::Tank(
   const std::string &name,
   const std::string &texturePath,
   const sf::Vector2f &pos,
+  const int &incrementSpeed,
   sf::Time *elapsed) :
-  Entity(name, texturePath, pos, elapsed)
-{}
+  Entity(name, texturePath, pos, incrementSpeed, elapsed)
+{
+  this->m_sprite.setScale(0.5f, 0.5f);
+}
 
 Tank::~Tank()
 {}
 
-void Tank::handleInput()
+void Tank::fire()
+{}
+
+void Tank::handleInput(const Window &window)
 {
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     this->moveForward();
@@ -21,4 +27,5 @@ void Tank::handleInput()
     this->rotateLeft();
   else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     this->rotateRight();
+  this->boundInWindow(window);
 }

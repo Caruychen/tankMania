@@ -22,7 +22,7 @@ class Window
     void draw(sf::Drawable &drawable);
 
     // Accessors
-    sf::Vector2u getWindowSize();
+    const sf::Vector2u getSize() const;
     const bool isDone() const;
     const bool isFullScreen() const;
 

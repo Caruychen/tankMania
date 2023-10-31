@@ -5,8 +5,9 @@ Entity::Entity(
   const std::string &name,
   const std::string &texturePath,
   const sf::Vector2f &pos,
+  const int &incrementSpeed,
   sf::Time *elapsed) :
-  m_name(name), m_incrementSpeed(200), m_rotationSpeed(200), m_elapsed(elapsed)
+  m_name(name), m_incrementSpeed(incrementSpeed), m_rotationSpeed(200), m_elapsed(elapsed)
 {
   this->m_texture.loadFromFile(texturePath);
   this->m_sprite.setTexture(this->m_texture);
@@ -44,6 +45,28 @@ void Entity::rotateLeft()
 void Entity::rotateRight()
 {
   this->m_sprite.rotate(this->_getRotationSpeed());
+}
+
+void Entity::boundInWindow(const Window &window)
+{
+  sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
+
+  if (spriteBounds.left < 0)
+    this->m_sprite.setPosition(
+      spriteBounds.width / 2,
+      this->m_sprite.getPosition().y);
+  else if (spriteBounds.left + spriteBounds.width > window.getSize().x)
+    this->m_sprite.setPosition(
+      window.getSize().x - spriteBounds.width / 2,
+      this->m_sprite.getPosition().y);
+  if (spriteBounds.top < 0)
+    this->m_sprite.setPosition(
+      this->m_sprite.getPosition().x,
+      spriteBounds.height / 2);
+  else if (spriteBounds.top + spriteBounds.height > window.getSize().y)
+    this->m_sprite.setPosition(
+      this->m_sprite.getPosition().x,
+      window.getSize().y - spriteBounds.height / 2);
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const

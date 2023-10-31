@@ -9,6 +9,7 @@ Game::Game(): m_window("Tank Mania!", sf::Vector2u(1600, 900))
     "Tank",
     "assets/tanks/blueTank.png",
     sf::Vector2f(0, 0),
+    200,
     &this->m_elapsed);
 }
 
@@ -37,7 +38,7 @@ sf::Time Game::getElapsed()
 void Game::update()
 {
   this->m_window.update();
-  this->m_tank->handleInput();
+  this->m_tank->handleInput(*this->getWindow());
 }
 
 void Game::render()
@@ -53,21 +54,4 @@ void Game::restartClock()
 }
 
 // Private methods
-/*
-void Game::_moveTank()
-{
-  sf::Vector2u windowSize = this->m_window.getWindowSize();
-  sf::Vector2u textureSize = this->m_tankTexture.getSize();
-  float timeElapsed = this->getElapsed().asSeconds();
 
-  if ((this->m_tank.getPosition().x + textureSize.x > windowSize.x && m_increment.x > 0)
-    || (this->m_tank.getPosition().x <= 0 && m_increment.x < 0))
-    m_increment.x = -m_increment.x;
-  if ((this->m_tank.getPosition().y + textureSize.y > windowSize.y && m_increment.y > 0)
-    || (this->m_tank.getPosition().y <= 0 && m_increment.y < 0))
-    m_increment.y = -m_increment.y;
-  this->m_tank.setPosition(
-    this->m_tank.getPosition().x + (m_increment.x * timeElapsed),
-    this->m_tank.getPosition().y + (m_increment.y * timeElapsed));
-}
-*/
