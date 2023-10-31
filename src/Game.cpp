@@ -3,7 +3,7 @@
 #include <iostream>
 
 // Constructors & Destructors
-Game::Game(): m_window("Tank Mania!", sf::Vector2u(800, 600))
+Game::Game(): m_window("Tank Mania!", sf::Vector2u(1600, 900))
 {
   this->m_tank = new Tank(
     "Tank",

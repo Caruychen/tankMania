@@ -21,7 +21,7 @@ Entity::~Entity()
 
 void Entity::moveForward()
 {
-  float angle = this->_getAngle();
+  float angle = this->_getAngleRadians();
   float x = sin(angle) * this->_getMoveSpeed();
   float y = cos(angle) * this->_getMoveSpeed();
   this->m_sprite.move(x, -y);
@@ -30,7 +30,7 @@ void Entity::moveForward()
 void Entity::moveBackward()
 {
 
-  float angle = this->_getAngle();
+  float angle = this->_getAngleRadians();
   float x = sin(angle) * this->_getMoveSpeed();
   float y = cos(angle) * this->_getMoveSpeed();
   this->m_sprite.move(-x, y);
@@ -61,7 +61,7 @@ const float Entity::_getRotationSpeed() const
   return this->m_rotationSpeed * this->m_elapsed->asSeconds();
 }
 
-const float Entity::_getAngle() const
+const float Entity::_getAngleRadians() const
 {
   return this->m_sprite.getRotation() * M_PI / 180;
 }

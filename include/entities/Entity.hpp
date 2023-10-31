@@ -23,7 +23,7 @@ class Entity : public sf::Drawable
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     const float _getMoveSpeed() const;
     const float _getRotationSpeed() const;
-    const float _getAngle() const;
+    const float _getAngleRadians() const;
 
     std::string m_name;
     sf::Texture m_texture;
