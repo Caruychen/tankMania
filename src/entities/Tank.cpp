@@ -16,16 +16,3 @@ Tank::~Tank()
 
 void Tank::fire()
 {}
-
-void Tank::handleInput(const Window &window)
-{
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-    this->moveForward();
-  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    this->moveBackward();
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    this->rotateLeft();
-  else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    this->rotateRight();
-  this->boundInWindow(window);
-}

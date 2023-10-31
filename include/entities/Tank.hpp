@@ -15,7 +15,6 @@ class Tank : public Entity
     ~Tank();
 
     void fire();
-    void handleInput(const Window &window);
 
   private:
 };

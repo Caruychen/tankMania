@@ -1,21 +1,20 @@
 #include "Game.hpp"
-#include "Tank.hpp"
+#include "Player.hpp"
 #include <iostream>
 
 // Constructors & Destructors
 Game::Game(): m_window("Tank Mania!", sf::Vector2u(1200, 675))
 {
-  this->m_tank = new Tank(
-    "Tank",
+  this->m_player = new Player(
+    2,
     "assets/tanks/blueTank.png",
     sf::Vector2f(0, 0),
-    180,
     &this->m_elapsed);
 }
 
 Game::~Game()
 {
-  delete this->m_tank;
+  delete this->m_player;
 }
 
 // Accessors
@@ -38,13 +37,13 @@ sf::Time Game::getElapsed()
 void Game::update()
 {
   this->m_window.update();
-  this->m_tank->handleInput(*this->getWindow());
+  this->m_player->handleInput(*this->getWindow());
 }
 
 void Game::render()
 {
   this->m_window.beginDraw();
-  this->m_window.draw(*this->m_tank);
+  this->m_window.draw(*this->m_player);
   this->m_window.endDraw();
 }
 

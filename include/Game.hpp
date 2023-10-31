@@ -3,7 +3,7 @@
 
 # include <SFML/Graphics.hpp>
 # include "Window.hpp"
-# include "Tank.hpp"
+# include "Player.hpp"
 
 # define MAP_WIDTH 1024
 # define MAP_HEIGHT 512
@@ -33,7 +33,7 @@ class Game
     Window m_window;
     sf::Clock m_clock;
     sf::Time m_elapsed;
-    Tank *m_tank;
+    Player *m_player;
 };
 
 #endif
