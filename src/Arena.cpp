@@ -15,6 +15,15 @@ void Arena::load(void)
   this->_loadWalls();
 }
 
+const sf::Vector2u Arena::getSize() const
+{
+  sf::Vector2u size;
+
+  size.x = (unsigned int) this->m_arenaSize.x;
+  size.y = (unsigned int) this->m_arenaSize.y;
+  return (size);
+}
+
 void Arena::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(m_vertices, states);

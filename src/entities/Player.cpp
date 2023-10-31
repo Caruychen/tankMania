@@ -19,7 +19,7 @@ Player::Player(
 Player::~Player()
 {}
 
-void Player::handleInput(const Window &window)
+void Player::handleInput(const Arena &arena)
 {
   if (sf::Keyboard::isKeyPressed(this->m_forward))
     this->moveForward();
@@ -29,7 +29,7 @@ void Player::handleInput(const Window &window)
     this->rotateLeft();
   else if (sf::Keyboard::isKeyPressed(this->m_right))
     this->rotateRight();
-  this->boundInWindow(window);
+  this->boundInArena(arena);
 }
 
 void Player::_setupKeyBindings()

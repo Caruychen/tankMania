@@ -19,11 +19,6 @@ const bool Game::running() const
   return !this->m_window.isDone();
 }
 
-Window *Game::getWindow()
-{
-  return &this->m_window;
-}
-
 sf::Time Game::getElapsed()
 {
   return this->m_elapsed;
@@ -33,8 +28,8 @@ sf::Time Game::getElapsed()
 void Game::update()
 {
   this->m_window.update();
-  this->m_players.first->handleInput(*this->getWindow());
-  this->m_players.second->handleInput(*this->getWindow());
+  this->m_players.first->handleInput(this->m_arena);
+  this->m_players.second->handleInput(this->m_arena);
 }
 
 void Game::render()

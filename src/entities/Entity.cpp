@@ -47,7 +47,7 @@ void Entity::rotateRight()
   this->m_sprite.rotate(this->_getRotationSpeed());
 }
 
-void Entity::boundInWindow(const Window &window)
+void Entity::boundInArena(const Arena &arena)
 {
   sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
   const float widthOffset = spriteBounds.width / 2 + BOUNDING_BUFFER;
@@ -55,12 +55,12 @@ void Entity::boundInWindow(const Window &window)
 
   if (spriteBounds.left < 0)
     this->m_sprite.setPosition(widthOffset, pos.y);
-  else if (spriteBounds.left + spriteBounds.width > window.getSize().x)
-    this->m_sprite.setPosition(window.getSize().x - widthOffset, pos.y);
+  else if (spriteBounds.left + spriteBounds.width > arena.getSize().x)
+    this->m_sprite.setPosition(arena.getSize().x - widthOffset, pos.y);
   if (spriteBounds.top < 0)
     this->m_sprite.setPosition(pos.x, widthOffset);
-  else if (spriteBounds.top + spriteBounds.height > window.getSize().y)
-    this->m_sprite.setPosition(pos.x, window.getSize().y - widthOffset);
+  else if (spriteBounds.top + spriteBounds.height > arena.getSize().y)
+    this->m_sprite.setPosition(pos.x, arena.getSize().y - widthOffset);
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const

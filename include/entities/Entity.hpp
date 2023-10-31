@@ -3,7 +3,7 @@
 
 # include <string>
 # include <SFML/Graphics.hpp>
-# include "Window.hpp"
+# include "Arena.hpp"
 
 # define BOUNDING_BUFFER 1
 
@@ -23,7 +23,7 @@ class Entity : public sf::Drawable
     void rotateLeft();
     void rotateRight();
     //bool isColliding(const Entity &other) const;
-    void boundInWindow(const Window &window);
+    void boundInArena(const Arena &arena);
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

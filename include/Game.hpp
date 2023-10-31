@@ -19,7 +19,6 @@ class Game
 
     // Accessors
     const bool running() const;
-    Window* getWindow();
     sf::Time getElapsed();
 
     // Functions

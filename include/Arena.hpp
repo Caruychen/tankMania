@@ -12,6 +12,7 @@ class Arena : public sf::Drawable
     Arena(const std::string &mapFile);
     ~Arena();
     void load(void);
+    const sf::Vector2u getSize() const;
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

@@ -32,7 +32,7 @@ class Player : public Tank
       sf::Time *elapsed);
     ~Player();
 
-    void handleInput(const Window &window);
+    void handleInput(const Arena &arena);
 
   private:
     void _setupKeyBindings();
