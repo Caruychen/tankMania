@@ -8,7 +8,7 @@ Tank::Tank(
   sf::Time *elapsed) :
   Entity(name, texturePath, pos, incrementSpeed, elapsed)
 {
-  this->m_sprite.setScale(0.5f, 0.5f);
+  this->m_sprite.setScale(0.3f, 0.3f);
 }
 
 Tank::~Tank()

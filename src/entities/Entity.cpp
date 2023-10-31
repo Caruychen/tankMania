@@ -50,23 +50,17 @@ void Entity::rotateRight()
 void Entity::boundInWindow(const Window &window)
 {
   sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
+  const float widthOffset = spriteBounds.width / 2 + BOUNDING_BUFFER;
+  const sf::Vector2f &pos = this->m_sprite.getPosition();
 
   if (spriteBounds.left < 0)
-    this->m_sprite.setPosition(
-      spriteBounds.width / 2,
-      this->m_sprite.getPosition().y);
+    this->m_sprite.setPosition(widthOffset, pos.y);
   else if (spriteBounds.left + spriteBounds.width > window.getSize().x)
-    this->m_sprite.setPosition(
-      window.getSize().x - spriteBounds.width / 2,
-      this->m_sprite.getPosition().y);
+    this->m_sprite.setPosition(window.getSize().x - widthOffset, pos.y);
   if (spriteBounds.top < 0)
-    this->m_sprite.setPosition(
-      this->m_sprite.getPosition().x,
-      spriteBounds.height / 2);
+    this->m_sprite.setPosition(pos.x, widthOffset);
   else if (spriteBounds.top + spriteBounds.height > window.getSize().y)
-    this->m_sprite.setPosition(
-      this->m_sprite.getPosition().x,
-      window.getSize().y - spriteBounds.height / 2);
+    this->m_sprite.setPosition(pos.x, window.getSize().y - widthOffset);
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const

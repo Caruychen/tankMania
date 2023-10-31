@@ -5,6 +5,8 @@
 # include <SFML/Graphics.hpp>
 # include "Window.hpp"
 
+# define BOUNDING_BUFFER 1
+
 class Entity : public sf::Drawable
 {
   public:

@@ -9,7 +9,7 @@ Game::Game(): m_window("Tank Mania!", sf::Vector2u(1600, 900))
     "Tank",
     "assets/tanks/blueTank.png",
     sf::Vector2f(0, 0),
-    200,
+    180,
     &this->m_elapsed);
 }
 
