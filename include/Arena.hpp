@@ -6,7 +6,7 @@
 # define ARENA_WIDTH 1200
 # define ARENA_HEIGHT 600
 
-class Arena : public sf::Drawable, public sf::Transformable
+class Arena : public sf::Drawable
 {
   public:
     Arena(const std::string &mapFile);
@@ -22,6 +22,7 @@ class Arena : public sf::Drawable, public sf::Transformable
     std::vector<uint8_t> m_data;
     std::vector<sf::FloatRect> m_walls;
     sf::VertexArray m_vertices;
+    sf::Vector2f m_arenaSize;
     sf::Vector2f m_tileSize;
     unsigned int m_heightInTiles;
     unsigned int m_widthInTiles;

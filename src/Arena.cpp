@@ -1,7 +1,7 @@
 #include "Arena.hpp"
 #include <iostream>
 
-Arena::Arena(const std::string &mapFile)
+Arena::Arena(const std::string &mapFile) : m_arenaSize(ARENA_WIDTH, ARENA_HEIGHT)
 {
   this->_readMap(mapFile);
 }
@@ -17,7 +17,6 @@ void Arena::load(void)
 
 void Arena::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-  states.transform *= getTransform();
   target.draw(m_vertices, states);
 }
 
@@ -37,8 +36,8 @@ void  Arena::_readMap(const std::string& mapFile)
   this->m_heightInTiles = sqrt(this->m_data.size() / 2);
   this->m_widthInTiles = this->m_heightInTiles * 2;
   this->m_tileSize = sf::Vector2f(
-    (float)ARENA_WIDTH / m_widthInTiles,
-    (float)ARENA_HEIGHT / m_heightInTiles);
+    this->m_arenaSize.x / m_widthInTiles,
+    this->m_arenaSize.y / m_heightInTiles);
 }
 
 void Arena::_loadTiles(void)
