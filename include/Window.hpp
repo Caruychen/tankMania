@@ -2,8 +2,8 @@
 # define WINDOW_HPP
 
 # include <SFML/Graphics.hpp>
-# define DEFAULT_WINDOW_WIDTH 1600
-# define DEFAULT_WINDOW_HEIGHT 900
+# define DEFAULT_WINDOW_WIDTH 1200
+# define DEFAULT_WINDOW_HEIGHT 675
 
 class Window
 {
