@@ -30,10 +30,12 @@ class Game
     void restartClock();
 
   private:
+    void _setupPlayers();
+
     Window m_window;
     sf::Clock m_clock;
     sf::Time m_elapsed;
-    Player *m_player;
+    std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> m_players;
 };
 
 #endif
