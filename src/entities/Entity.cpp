@@ -70,6 +70,13 @@ void Entity::updateBounds(const Arena &arena)
 {
   this->_boundInArena(arena);
   Offset offset = this->_getWallOffset(arena);
+  if (offset.isOverlapping)
+  {
+    this->m_sprite.move(offset.value);
+    this->_updateCollider(
+      this->m_sprite.getPosition(),
+      this->_getAngleRadians());
+  }
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const

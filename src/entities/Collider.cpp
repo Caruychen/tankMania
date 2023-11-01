@@ -85,6 +85,8 @@ const bool Collider::_intersects(const Collider &other, float *overlap) const
   {
     int j = (i + 1) % size;
     Vec2d projectedAxis = {gCorners[j].y - gCorners[i].y, -(gCorners[j].x - gCorners[i].x)};
+    float div = sqrtf(projectedAxis.x * projectedAxis.x + projectedAxis.y * projectedAxis.y);
+		projectedAxis = { projectedAxis.x / div, projectedAxis.y / div };
 
     Shadow shadow1 = this->_findShadowOnAxis(projectedAxis);
     Shadow shadow2 = other._findShadowOnAxis(projectedAxis);
@@ -98,26 +100,37 @@ const bool Collider::_intersects(const Collider &other, float *overlap) const
   return true;
 }
 
+Offset Collider::_computeOffset(const Collider &other) const
+{
+  Offset offset = {false, {0, 0}};
+  float overlap = INFINITY;
+  Vec2d vecDistance;
+  float straightDistance;
+
+  offset.isOverlapping = this->_intersects(other, &overlap) &&
+    other._intersects(*this, &overlap);
+  if (!offset.isOverlapping)
+    return offset;
+  vecDistance = { other.m_pos.x - this->m_pos.x, other.m_pos.y - this->m_pos.y };
+  straightDistance = sqrtf(vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y);
+  offset.value = {
+    -overlap * vecDistance.x / straightDistance * 1.5f,
+    -overlap * vecDistance.y / straightDistance * 1.5f};
+  return offset;
+}
+
 const Offset Collider::_getWallOffset(const Arena &arena) const
 {
   std::vector<sf::FloatRect> arenaWalls = arena.getWalls();
-  Offset offset = {false, {0, 0}};
-  float overlap = INFINITY;
   Collider wallCollider;
+  Offset offset = {false, {0, 0}};
 
   for (sf::FloatRect wall: arenaWalls)
   {
     wallCollider = Collider(wall);
-    overlap = INFINITY;
-    offset.isOverlapping = this->_intersects(wallCollider, &overlap) &&
-      wallCollider._intersects(*this, &overlap);
+    offset = this->_computeOffset(wallCollider);
     if (offset.isOverlapping)
       break;
   }
-  Vec2d d = { wallCollider.m_pos.x - this->m_pos.x, wallCollider.m_pos.y - this->m_pos.y };
-  float s = sqrtf(d.x*d.x + d.y*d.y);
-  offset.value = {overlap * d.x / s, overlap * d.y / s};
-  if (offset.isOverlapping)
-    std::cout << "Overlap: " << overlap << std::endl;
   return offset;
 }

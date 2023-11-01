@@ -42,6 +42,7 @@ class Collider
     void _updateCollider(const sf::Vector2f pos, const float angle);
     const Shadow _findShadowOnAxis(const Vec2d axis) const;
     const bool _intersects(const Collider &other, float *overlap) const;
+    Offset _computeOffset(const Collider &other) const;
     const Offset _getWallOffset(const Arena &arena) const;
 
   private:
