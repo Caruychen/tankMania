@@ -40,7 +40,6 @@ void Entity::moveForward()
 
 void Entity::moveBackward()
 {
-
   float angle = this->_getAngleRadians();
   float x = sin(angle) * this->_getMoveSpeed();
   float y = cos(angle) * this->_getMoveSpeed();
@@ -70,12 +69,13 @@ void Entity::updateBounds(const Arena &arena)
 {
   this->_boundInArena(arena);
   Offset offset = this->_getWallOffset(arena);
-  if (offset.isOverlapping)
+  while (offset.isOverlapping)
   {
     this->m_sprite.move(offset.value);
     this->_updateCollider(
       this->m_sprite.getPosition(),
       this->_getAngleRadians());
+    offset = this->_getWallOffset(arena);
   }
 }
 

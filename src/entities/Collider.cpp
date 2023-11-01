@@ -97,6 +97,8 @@ const bool Collider::_intersects(const Collider &other, float *overlap) const
       return false;
   }
   *overlap = std::min(l_overlap, *overlap);
+  if (*overlap < 1.0f)
+    *overlap = 1.0f;
   return true;
 }
 
@@ -124,13 +126,21 @@ const Offset Collider::_getWallOffset(const Arena &arena) const
   std::vector<sf::FloatRect> arenaWalls = arena.getWalls();
   Collider wallCollider;
   Offset offset = {false, {0, 0}};
+  static unsigned int lastIndex;
+  unsigned int index = lastIndex;
 
-  for (sf::FloatRect wall: arenaWalls)
+  while (index < arenaWalls.size())
   {
-    wallCollider = Collider(wall);
+    wallCollider = Collider(arenaWalls[index]);
     offset = this->_computeOffset(wallCollider);
     if (offset.isOverlapping)
+    {
+      lastIndex = index;
       break;
+    }
+    ++index;
   }
+  if (index == arenaWalls.size())
+    lastIndex = 0;
   return offset;
 }
