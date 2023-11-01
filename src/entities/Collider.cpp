@@ -79,20 +79,22 @@ const bool Collider::_intersects(const Collider &other, float *overlap) const
 {
   std::vector<Vec2d> gCorners = this->m_globalCorners;
   int size = gCorners.size();
+  float l_overlap = INFINITY;
 
   for (int i = 0; i < size; ++i)
   {
     int j = (i + 1) % size;
-    Vec2d axis = {-(gCorners[j].y - gCorners[i].y), gCorners[j].x - gCorners[i].x};
+    Vec2d axis = {gCorners[i].y - gCorners[j].y, gCorners[j].x - gCorners[i].x};
 
     Shadow shadow1 = this->_findShadowOnAxis(axis);
     Shadow shadow2 = other._findShadowOnAxis(axis);
-    *overlap = std::min(
+    l_overlap = std::min(
       std::min(shadow1.max, shadow2.max) - std::max(shadow1.min, shadow2.min),
-      *overlap);
+      l_overlap);
     if (!(shadow2.max >= shadow1.min && shadow1.max >= shadow2.min))
       return false;
   }
+  *overlap = std::min(l_overlap, *overlap);
   return true;
 }
 
@@ -107,9 +109,8 @@ const Offset Collider::_getWallOffset(const Arena &arena) const
   {
     wallCollider = Collider(wall);
     overlap = INFINITY;
-    offset.isOverlapping = this->_intersects(wallCollider, &overlap);
-    if (offset.isOverlapping)
-      offset.isOverlapping = wallCollider._intersects(*this, &overlap);
+    offset.isOverlapping = this->_intersects(wallCollider, &overlap) &&
+      wallCollider._intersects(*this, &overlap);
     if (offset.isOverlapping)
       break;
   }
