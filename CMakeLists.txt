@@ -19,6 +19,7 @@ set(HEADER_FILES
   include/Window.hpp
   include/Game.hpp
   include/Arena.hpp
+  include/entities/Collider.hpp
   include/entities/Entity.hpp
   include/entities/Tank.hpp
   include/entities/Player.hpp
@@ -29,6 +30,7 @@ set(SOURCE_FILES
   src/Window.cpp
   src/Game.cpp
   src/Arena.cpp
+  src/entities/Collider.cpp
   src/entities/Entity.cpp
   src/entities/Tank.cpp
   src/entities/Player.cpp
