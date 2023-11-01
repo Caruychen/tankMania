@@ -60,7 +60,7 @@ void Collider::_updateCollider(const sf::Vector2f pos, const float angle)
   this->m_pos = pos;
 }
 
-const Shadow Collider::_findShadowOnAxis(const Vec2d axis) const
+const Shadow Collider::_findShadowOnAxis(const Vec2d projectedAxis) const
 {
   Shadow shadow = {INFINITY, -INFINITY};
   std::vector<Vec2d> gCorners = this->m_globalCorners;
@@ -68,9 +68,9 @@ const Shadow Collider::_findShadowOnAxis(const Vec2d axis) const
 
   for (int cornerIndex = 0; cornerIndex < size; ++cornerIndex)
   {
-    float q = (gCorners[cornerIndex].x * axis.x + gCorners[cornerIndex].y * axis.y);
-    shadow.min = std::min(shadow.min, q);
-    shadow.max = std::max(shadow.max, q);
+    float dotProd = (gCorners[cornerIndex].x * projectedAxis.x + gCorners[cornerIndex].y * projectedAxis.y);
+    shadow.min = std::min(shadow.min, dotProd);
+    shadow.max = std::max(shadow.max, dotProd);
   }
   return shadow;
 }
@@ -84,10 +84,10 @@ const bool Collider::_intersects(const Collider &other, float *overlap) const
   for (int i = 0; i < size; ++i)
   {
     int j = (i + 1) % size;
-    Vec2d axis = {gCorners[i].y - gCorners[j].y, gCorners[j].x - gCorners[i].x};
+    Vec2d projectedAxis = {gCorners[j].y - gCorners[i].y, -(gCorners[j].x - gCorners[i].x)};
 
-    Shadow shadow1 = this->_findShadowOnAxis(axis);
-    Shadow shadow2 = other._findShadowOnAxis(axis);
+    Shadow shadow1 = this->_findShadowOnAxis(projectedAxis);
+    Shadow shadow2 = other._findShadowOnAxis(projectedAxis);
     l_overlap = std::min(
       std::min(shadow1.max, shadow2.max) - std::max(shadow1.min, shadow2.min),
       l_overlap);
