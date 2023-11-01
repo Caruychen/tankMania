@@ -114,8 +114,8 @@ Offset Collider::_computeOffset(const Collider &other) const
   vecDistance = { other.m_pos.x - this->m_pos.x, other.m_pos.y - this->m_pos.y };
   straightDistance = sqrtf(vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y);
   offset.value = {
-    -overlap * vecDistance.x / straightDistance * 1.5f,
-    -overlap * vecDistance.y / straightDistance * 1.5f};
+    -overlap * vecDistance.x / straightDistance,
+    -overlap * vecDistance.y / straightDistance};
   return offset;
 }
 
