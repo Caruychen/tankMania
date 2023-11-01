@@ -57,6 +57,6 @@ void Game::_setupPlayers()
   this->m_players.second = std::unique_ptr<Player>(new Player(
     2,
     "assets/tanks/redTank.png",
-    sf::Vector2f(200, 200),
+    sf::Vector2f(1200, 0),
     &this->m_elapsed));
 }
