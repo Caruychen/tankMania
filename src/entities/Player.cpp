@@ -12,7 +12,7 @@ Player::Player(
   if (number == 1)
     this->m_sprite.setRotation(0);
   else if (number == 2)
-    this->m_sprite.setRotation(270);
+    this->m_sprite.setRotation(0);
   this->_setupKeyBindings();
 }
 
