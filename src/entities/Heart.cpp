@@ -7,9 +7,9 @@ Heart::Heart(
   const float &scale) :
   m_isAlive(isAlive),
   Entity(
-    "Heart",
     "assets/health/hearts.png",
     pos,
+    0,
     sf::Vector2f(scale, scale),
     1,
     nullptr)

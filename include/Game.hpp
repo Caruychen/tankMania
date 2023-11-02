@@ -28,10 +28,8 @@ class Game
     void restartClock();
 
   private:
-    void _updateHeartSpawn(const bool spawn);
+    void _spawnHeart(const bool spawn);
     void _spawnPlayers();
-    void _spawnHeart();
-    void _resetHeart();
 
     Window m_window;
     Arena m_arena;

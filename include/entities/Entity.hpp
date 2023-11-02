@@ -12,24 +12,25 @@ class Entity : public sf::Drawable, public Collider
 {
   public:
     Entity(
-      const std::string &name,
       const std::string &texturePath,
       const sf::Vector2f &pos,
+      const float &rotation,
       const sf::Vector2f &scale,
       const int &incrementSpeed,
       sf::Time *elapsed);
     ~Entity();
 
-    // Movement
+    // Transformations
     void move(const int direction);
     void rotate(const int direction);
+    void setScale(sf::Vector2f scale);
+    void setPos(sf::Vector2f pos);
+    void setRotation(float rotation);
     
-    // Updates & Boundaries
+  protected:
     void checkBoundaryCollisions(const Arena &arena);
     void boundInArena(const Arena &arena);
 
-  protected:
-    std::string m_name;
     sf::Texture m_texture;
     sf::Sprite m_sprite;
     sf::Time *m_elapsed;

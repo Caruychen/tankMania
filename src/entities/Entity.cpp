@@ -2,13 +2,13 @@
 #include <iostream>
 
 Entity::Entity(
-  const std::string &name,
   const std::string &texturePath,
   const sf::Vector2f &pos,
+  const float &rotation,
   const sf::Vector2f &scale,
   const int &incrementSpeed,
   sf::Time *elapsed) :
-  m_name(name), m_incrementSpeed(incrementSpeed), m_rotationSpeed(200), m_elapsed(elapsed),
+  m_incrementSpeed(incrementSpeed), m_rotationSpeed(200), m_elapsed(elapsed),
   Collider(&this->m_sprite)
 {
   /* 
@@ -24,6 +24,7 @@ Entity::Entity(
   this->m_sprite.setOrigin(size / 2, size / 2);
   this->m_sprite.setScale(scale.x, scale.y);
   this->initCollider();
+  this->m_sprite.setRotation(rotation);
 }
 
 Entity::~Entity()
@@ -46,6 +47,24 @@ void Entity::rotate(const int direction)
     return;
   const float speed = this->m_rotationSpeed * this->m_elapsed->asSeconds();
   this->m_sprite.rotate(direction * speed);
+}
+
+void Entity::setScale(sf::Vector2f scale)
+{
+  this->m_sprite.setScale(scale);
+  this->initCollider();
+}
+
+void Entity::setPos(sf::Vector2f pos)
+{
+  this->m_sprite.setPosition(pos);
+  this->initCollider();
+}
+
+void Entity::setRotation(float rotation)
+{
+  this->m_sprite.setRotation(rotation);
+  this->initCollider();
 }
 
 void Entity::checkBoundaryCollisions(const Arena &arena)

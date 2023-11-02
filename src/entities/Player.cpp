@@ -6,9 +6,11 @@ Player::Player(
   const std::string &texturePath,
   const PlayerConfigs configs,
   sf::Time *elapsed) :
-  Tank("Player " + std::to_string(number),
+  Tank(
+    number,
     texturePath,
     configs.spawnPos,
+    configs.spawnRotation,
     MOVEMENT_SPEED,
     elapsed),
   m_number(number),
@@ -17,7 +19,6 @@ Player::Player(
   m_zones(configs.zones),
   m_spawnRotation(configs.spawnRotation)
 {
-  this->m_sprite.setRotation(configs.spawnRotation);
   this->_setupKeyBindings();
   this->_initHealth();
 }
@@ -25,23 +26,21 @@ Player::Player(
 Player::~Player()
 {}
 
-void Player::handleInput(void)
+void Player::update(void)
 {
-  if (sf::Keyboard::isKeyPressed(this->m_forward))
-    this->move(1);
-  else if (sf::Keyboard::isKeyPressed(this->m_backward))
-    this->move(-1);
-  if (sf::Keyboard::isKeyPressed(this->m_left))
-    this->rotate(-1);
-  else if (sf::Keyboard::isKeyPressed(this->m_right))
-    this->rotate(1);
+  this->_handleInput();
+  this->updateProjectiles();
 }
 
-void Player::checkCollisions(std::unique_ptr<Player> &other)
+void Player::checkCollisions(
+  std::unique_ptr<Player> &other,
+  const Arena &arena)
 {
   this->updateCollider();
   this->offsetCollision(other->getCollider());
   this->checkZoneCollision(other);
+  this->checkBoundaryCollisions(arena);
+  this->checkProjectileCollisions(other);
 }
 
 void Player::checkZoneCollision(std::unique_ptr<Player> &other)
@@ -57,6 +56,21 @@ const bool Player::checkHeartCollision(std::unique_ptr<Heart> &heart)
   if (!this->isColliding(heart->getCollider()))
     return false;
   return this->_addHealth();
+}
+
+void Player::checkProjectileCollisions(std::unique_ptr<Player> &other)
+{
+  std::vector<std::unique_ptr<Projectile>> &projectiles = other->getProjectiles();
+  for (int index = 0; index < projectiles.size(); ++index)
+  {
+    if (!this->isColliding(projectiles[index]->getCollider()))
+      continue;
+    this->takeDamage();
+    this->setPos(this->m_spawnPos);
+    this->setRotation(this->m_spawnRotation);
+    other->deleteProjectile(index);
+  }
+
 }
 
 void Player::takeDamage()
@@ -80,6 +94,20 @@ void Player::_setupKeyBindings()
   this->m_left = m_number == 1 ? (sf::Keyboard::Key) P1::LEFT : (sf::Keyboard::Key) P2::LEFT;
   this->m_right = m_number == 1 ? (sf::Keyboard::Key) P1::RIGHT : (sf::Keyboard::Key) P2::RIGHT;
   this->m_shoot = m_number == 1 ? (sf::Keyboard::Key) P1::SHOOT : (sf::Keyboard::Key) P2::SHOOT;
+}
+
+void Player::_handleInput(void)
+{
+  if (sf::Keyboard::isKeyPressed(this->m_forward))
+    this->move(1);
+  else if (sf::Keyboard::isKeyPressed(this->m_backward))
+    this->move(-1);
+  if (sf::Keyboard::isKeyPressed(this->m_left))
+    this->rotate(-1);
+  else if (sf::Keyboard::isKeyPressed(this->m_right))
+    this->rotate(1);
+  if (sf::Keyboard::isKeyPressed(this->m_shoot))
+    this->shoot();
 }
 
 void Player::_initHealth()
@@ -117,4 +145,8 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
   target.draw(this->m_sprite, states);
   for (auto &heart : this->m_health.hearts)
     target.draw(*heart, states);
+  for (auto &ammo : this->m_ammunition.ammo)
+    target.draw(*ammo, states);
+  for (auto &projectile : this->m_projectiles)
+    target.draw(*projectile, states);
 }

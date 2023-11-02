@@ -46,6 +46,7 @@ void Collider::initCollider()
   this->m_globalCorners.push_back({rect.width - origin.x, rect.height - origin.y});
   this->m_globalCorners.push_back({rect.left - origin.x, rect.height - origin.y});
   this->m_pos = this->m_spritePtr->getPosition();
+  this->updateCollider();
 }
 
 void Collider::updateCollider()
