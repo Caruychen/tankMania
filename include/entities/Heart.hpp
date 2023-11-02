@@ -3,7 +3,7 @@
 
 # include "Entity.hpp"
 # define HEART_SCALE 4.f
-# define TEXTURE_SIZE 13
+# define HEART_TEXTURE_SIZE 13
 
 class Heart : public Entity
 {

@@ -67,9 +67,20 @@ void Player::_initHealth()
 {
   this->m_health.current = INITIAL_HEALTH;
   this->m_health.max = MAX_HEALTH;
+  float textureSpacing = HEART_TEXTURE_SIZE * 4;
+  const float scaledWidth = HEART_TEXTURE_SIZE * HEART_SCALE / 2;
+  const float padding = 10;
+
   for (unsigned int i = 0; i < this->m_health.max; i++)
+  {
+    float increment = i * scaledWidth * 2 + scaledWidth + padding;
+    float heartX = this->m_number == 1 ? increment : ARENA_WIDTH - increment;
+    float heartY = ARENA_HEIGHT + scaledWidth + padding;
     this->m_health.hearts.push_back(std::unique_ptr<Heart>(
-      new Heart(i < m_health.current, sf::Vector2f(i * 50 + 10, ARENA_HEIGHT))));
+      new Heart(
+        i < m_health.current,
+        sf::Vector2f(heartX, heartY))));
+  }
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const

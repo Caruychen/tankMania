@@ -14,7 +14,9 @@ Heart::Heart(
     nullptr)
 {
   this->resetTexture();
-  this->m_sprite.setOrigin(0, 0);
+  this->m_sprite.setOrigin(
+    this->m_texture.getSize().x / 4,
+    this->m_texture.getSize().y / 2);
 }
 
 Heart::~Heart()
@@ -27,9 +29,11 @@ void Heart::setAlive(const bool &isAlive)
 
 void Heart::resetTexture(void)
 {
+  int textureWidth = this->m_texture.getSize().x / 2;
+  int textureHeight = this->m_texture.getSize().y;
   this->m_sprite.setTextureRect(sf::IntRect(
-    TEXTURE_SIZE * this->m_isAlive,
+    textureWidth * this->m_isAlive,
     0,
-    TEXTURE_SIZE,
-    TEXTURE_SIZE));
+    textureWidth,
+    textureHeight));
 }
