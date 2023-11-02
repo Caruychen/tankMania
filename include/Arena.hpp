@@ -19,11 +19,13 @@ class Arena : public sf::Drawable
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void _readMap(const std::string& mapFile);
     void _loadTiles(void);
+    void _loadBounds(void);
     void _loadWalls(void);
 
     std::vector<uint8_t> m_data;
     std::vector<sf::FloatRect> m_walls;
     sf::VertexArray m_vertices;
+    sf::VertexArray m_bounds;
     sf::Vector2f m_arenaSize;
     sf::Vector2f m_tileSize;
     unsigned int m_heightInTiles;

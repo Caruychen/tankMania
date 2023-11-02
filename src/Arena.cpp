@@ -12,6 +12,7 @@ Arena::~Arena()
 void Arena::load(void)
 {
   this->_loadTiles();
+  this->_loadBounds();
   this->_loadWalls();
 }
 
@@ -32,6 +33,7 @@ const std::vector<sf::FloatRect> Arena::getWalls() const
 void Arena::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(m_vertices, states);
+  target.draw(m_bounds, states);
 }
 
 void  Arena::_readMap(const std::string& mapFile)
@@ -85,6 +87,29 @@ void Arena::_loadTiles(void)
       triangles[5].color = colors[tileNumber];
     }
   }
+}
+
+void Arena::_loadBounds(void)
+{
+  this->m_bounds.setPrimitiveType(sf::LinesStrip);
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(1, 1)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 3, 1)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 3 * 2, 1)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH, 1)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH, ARENA_HEIGHT)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 3 * 2, ARENA_HEIGHT)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 3, ARENA_HEIGHT)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(1, ARENA_HEIGHT)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(1, 1)));
+  this->m_bounds[0].color = sf::Color::Blue;
+  this->m_bounds[1].color = sf::Color::Blue;
+  this->m_bounds[2].color = sf::Color::Red;
+  this->m_bounds[3].color = sf::Color::Red;
+  this->m_bounds[4].color = sf::Color::Red;
+  this->m_bounds[5].color = sf::Color::Red;
+  this->m_bounds[6].color = sf::Color::Blue;
+  this->m_bounds[7].color = sf::Color::Blue;
+  this->m_bounds[8].color = sf::Color::Blue;
 }
 
 void Arena::_loadWalls(void)
