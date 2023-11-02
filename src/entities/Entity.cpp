@@ -27,6 +27,8 @@ Entity::~Entity()
 
 void Entity::move(const int direction)
 {
+  if (this->m_elapsed == nullptr)
+    return;
   const float speed = this->m_incrementSpeed * this->m_elapsed->asSeconds();
   const float angle = this->m_sprite.getRotation() * M_PI / 180;
   const float x = direction * speed * sin(angle);
@@ -36,6 +38,8 @@ void Entity::move(const int direction)
 
 void Entity::rotate(const int direction)
 {
+  if (this->m_elapsed == nullptr)
+    return;
   const float speed = this->m_rotationSpeed * this->m_elapsed->asSeconds();
   this->m_sprite.rotate(direction * speed);
 }
