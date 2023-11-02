@@ -20,7 +20,7 @@ class Entity : public sf::Drawable, public Collider
       sf::Time *elapsed);
     ~Entity();
 
-    // Moement
+    // Movement
     void move(const int direction);
     void rotate(const int direction);
     
