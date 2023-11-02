@@ -1,7 +1,10 @@
 #include "Collider.hpp"
 #include <iostream>
 
-Collider::Collider()
+Collider::Collider() : m_spritePtr(nullptr)
+{}
+
+Collider::Collider(sf::Sprite *spritePtr) : m_spritePtr(spritePtr)
 {}
 
 Collider::Collider(const sf::FloatRect &wall)
@@ -21,10 +24,15 @@ Collider::Collider(const sf::FloatRect &wall)
 Collider::~Collider()
 {}
 
-void Collider::init(sf::Vector2f pos, sf::Vector2f origin, sf::FloatRect rect, const sf::Vector2f scale)
+void Collider::initCollider()
 {
-  origin.x *= scale.x;
-  origin.y *= scale.y;
+  if (this->m_spritePtr == nullptr)
+    return;
+  sf::Vector2f origin = this->m_spritePtr->getOrigin();
+  sf::FloatRect rect = this->m_spritePtr->getLocalBounds();
+  const sf::Vector2f scale = this->m_spritePtr->getScale();
+
+  origin = {origin.x * scale.x, origin.y * scale.y};
   rect.width *= scale.x;
   rect.height *= scale.y;
   this->m_localCorners.push_back({rect.left - origin.x, rect.top - origin.y});
@@ -35,32 +43,28 @@ void Collider::init(sf::Vector2f pos, sf::Vector2f origin, sf::FloatRect rect, c
   this->m_globalCorners.push_back({rect.width - origin.x, rect.top - origin.y});
   this->m_globalCorners.push_back({rect.width - origin.x, rect.height - origin.y});
   this->m_globalCorners.push_back({rect.left - origin.x, rect.height - origin.y});
-  this->m_pos = pos;
+  this->m_pos = this->m_spritePtr->getPosition();
 }
 
-int Collider::getNumCorners() const
+void Collider::_updateCollider()
 {
-  return this->m_globalCorners.size();
-}
-
-sf::Vector2f Collider::getPosition() const
-{
-  return this->m_pos;
-}
-
-void Collider::_updateCollider(const sf::Vector2f pos, const float angle)
-{
+  if (this->m_spritePtr == nullptr)
+    return;
   const std::vector<Vec2d> lCorners = this->m_localCorners;
+  const sf::Vector2f pos = this->m_spritePtr->getPosition();
+  const float angle = this->m_spritePtr->getRotation() * M_PI / 180;
 
   for (int index = 0; index < this->m_globalCorners.size(); ++index)
   {
-    this->m_globalCorners[index].x = pos.x + lCorners[index].x * cos(angle) - lCorners[index].y * sin(angle);
-    this->m_globalCorners[index].y = pos.y + lCorners[index].x * sin(angle) + lCorners[index].y * cos(angle);
+    this->m_globalCorners[index].x =
+      pos.x + lCorners[index].x * cos(angle) - lCorners[index].y * sin(angle);
+    this->m_globalCorners[index].y =
+      pos.y + lCorners[index].x * sin(angle) + lCorners[index].y * cos(angle);
   }
   this->m_pos = pos;
 }
 
-const Shadow Collider::_findShadowOnAxis(const Vec2d projectedAxis) const
+const Shadow Collider::_castOnAxis(const Vec2d projectedAxis) const
 {
   Shadow shadow = {INFINITY, -INFINITY};
   std::vector<Vec2d> gCorners = this->m_globalCorners;
@@ -78,69 +82,52 @@ const Shadow Collider::_findShadowOnAxis(const Vec2d projectedAxis) const
 const bool Collider::_intersects(const Collider &other, float *overlap) const
 {
   std::vector<Vec2d> gCorners = this->m_globalCorners;
-  int size = gCorners.size();
-  float l_overlap = INFINITY;
 
-  for (int i = 0; i < size; ++i)
+  for (int i = 0; i < gCorners.size(); ++i)
   {
-    int j = (i + 1) % size;
+    int j = (i + 1) % gCorners.size();
     Vec2d projectedAxis = {gCorners[j].y - gCorners[i].y, -(gCorners[j].x - gCorners[i].x)};
     float div = sqrtf(projectedAxis.x * projectedAxis.x + projectedAxis.y * projectedAxis.y);
-		projectedAxis = { projectedAxis.x / div, projectedAxis.y / div };
+		projectedAxis = { projectedAxis.x / div, projectedAxis.y / div }; //Normalize
 
-    Shadow shadow1 = this->_findShadowOnAxis(projectedAxis);
-    Shadow shadow2 = other._findShadowOnAxis(projectedAxis);
-    l_overlap = std::min(
-      std::min(shadow1.max, shadow2.max) - std::max(shadow1.min, shadow2.min),
-      l_overlap);
+    Shadow shadow1 = this->_castOnAxis(projectedAxis);
+    Shadow shadow2 = other._castOnAxis(projectedAxis);
+    *overlap = std::min(std::min(shadow1.max, shadow2.max) - std::max(shadow1.min, shadow2.min), *overlap);
     if (!(shadow2.max >= shadow1.min && shadow1.max >= shadow2.min))
       return false;
   }
-  *overlap = std::min(l_overlap, *overlap);
   if (*overlap < 1.0f)
-    *overlap = 1.0f;
+    *overlap = 1.0f; // Set a minimum overlap to avoid trivially small offsets
   return true;
 }
 
-Offset Collider::_computeOffset(const Collider &other) const
+const bool Collider::_isColliding(const Collider &other, sf::Vector2f *offset) const
 {
-  Offset offset = {false, {0, 0}};
   float overlap = INFINITY;
   Vec2d vecDistance;
-  float straightDistance;
+  float salarDistance;
 
-  offset.isOverlapping = this->_intersects(other, &overlap) &&
-    other._intersects(*this, &overlap);
-  if (!offset.isOverlapping)
-    return offset;
+  if (!(this->_intersects(other, &overlap) && other._intersects(*this, &overlap)))
+    return false;
   vecDistance = { other.m_pos.x - this->m_pos.x, other.m_pos.y - this->m_pos.y };
-  straightDistance = sqrtf(vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y);
-  offset.value = {
-    -overlap * vecDistance.x / straightDistance,
-    -overlap * vecDistance.y / straightDistance};
-  return offset;
+  salarDistance = sqrtf(vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y);
+  *offset = {
+    -overlap * vecDistance.x / salarDistance,
+    -overlap * vecDistance.y / salarDistance};
+  return true;
 }
 
-const Offset Collider::_getWallOffset(const Arena &arena) const
+void Collider::_boundInWalls(const Arena &arena)
 {
-  std::vector<sf::FloatRect> arenaWalls = arena.getWalls();
-  Collider wallCollider;
-  Offset offset = {false, {0, 0}};
-  static unsigned int lastIndex;
-  unsigned int index = lastIndex;
-
-  while (index < arenaWalls.size())
+  if (this->m_spritePtr == nullptr)
+    return;
+  for (sf::FloatRect wall: arena.getWalls())
   {
-    wallCollider = Collider(arenaWalls[index]);
-    offset = this->_computeOffset(wallCollider);
-    if (offset.isOverlapping)
-    {
-      lastIndex = index;
-      break;
-    }
-    ++index;
+    Collider wallCollider = Collider(wall);
+    sf::Vector2f offset = {0, 0};
+    if (!this->_isColliding(wallCollider, &offset))
+      continue;
+    this->m_spritePtr->move(offset);
+    this->_updateCollider();
   }
-  if (index == arenaWalls.size())
-    lastIndex = 0;
-  return offset;
 }
