@@ -11,6 +11,10 @@ Entity::Entity(
   m_name(name), m_incrementSpeed(incrementSpeed), m_rotationSpeed(200), m_elapsed(elapsed),
   Collider(&this->m_sprite)
 {
+  /* 
+   * Load texture, set sprite and origin 
+  * This assuees that the texture is a square
+   * */
   if (!this->m_texture.loadFromFile(texturePath))
     std::cerr << "Error loading texture: " << texturePath << std::endl;
   int size = std::min(this->m_texture.getSize().x, this->m_texture.getSize().y);
