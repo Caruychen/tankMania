@@ -43,6 +43,11 @@ const std::pair<PlayerConfigs, PlayerConfigs> Arena::getPlayerConfigs() const
   return this->m_playerConfigs;
 }
 
+const std::vector<sf::Vector2f> Arena::getSpaces() const
+{
+  return this->m_spaces;
+}
+
 void Arena::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(m_vertices, states);
@@ -134,13 +139,15 @@ void Arena::_loadObjects(void)
     for (unsigned int y = 0; y < m_heightInTiles; ++y)
     {
       tileNumber = this->m_data[x + y * m_widthInTiles];
-      if (tileNumber < 1)
-        continue;
       sf::Vector2f pos = sf::Vector2f(x * m_tileSize.x, y * m_tileSize.y);
+      sf::Vector2f posCentered = {pos.x + m_tileSize.x / 2, pos.y + m_tileSize.y / 2};
       sf::Vector2f size = sf::Vector2f(m_tileSize.x, m_tileSize.y);
       rect = sf::FloatRect(pos, size);
       switch (TileType(tileNumber))
       {
+        case TileType::EMPTY:
+          this->m_spaces.push_back(posCentered);
+          break;
         case TileType::WALL:
           this->m_walls.push_back(rect);
           break;
@@ -155,10 +162,10 @@ void Arena::_loadObjects(void)
           this->m_playerConfigs.second.zones.push_back(Collider(rect));
           break;
         case TileType::PLAYER_ONE:
-          this->m_playerConfigs.first.spawnPos = {pos.x + m_tileSize.x / 2, pos.y + m_tileSize.y / 2};
+          this->m_playerConfigs.first.spawnPos = posCentered;
           break;
         case TileType::PLAYER_TWO:
-          this->m_playerConfigs.second.spawnPos = {pos.x + m_tileSize.x / 2, pos.y + m_tileSize.y / 2};
+          this->m_playerConfigs.second.spawnPos = posCentered;
         default:
           break;
       }

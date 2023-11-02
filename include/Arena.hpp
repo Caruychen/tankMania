@@ -36,6 +36,7 @@ class Arena : public sf::Drawable
     const sf::Vector2u getSize() const;
     const std::vector<sf::FloatRect> getWalls() const;
     const std::pair<PlayerConfigs, PlayerConfigs> getPlayerConfigs() const;
+    const std::vector<sf::Vector2f> getSpaces() const;
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -51,6 +52,7 @@ class Arena : public sf::Drawable
     sf::VertexArray m_bounds;
     sf::Vector2f m_arenaSize;
     sf::Vector2f m_tileSize;
+    std::vector<sf::Vector2f> m_spaces;
     std::vector<sf::Color> m_colors;
     unsigned int m_heightInTiles;
     unsigned int m_widthInTiles;
