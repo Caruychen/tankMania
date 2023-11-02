@@ -65,11 +65,11 @@ void Collider::updateCollider()
   this->m_pos = pos;
 }
 
-void Collider::boundInWalls(const Arena &arena)
+void Collider::boundInWalls(std::vector<sf::FloatRect> walls)
 {
   if (this->m_spritePtr == nullptr)
     return;
-  for (sf::FloatRect wall: arena.getWalls())
+  for (sf::FloatRect wall: walls)
   {
     Collider wallCollider = Collider(wall);
     sf::Vector2f offset = {0, 0};

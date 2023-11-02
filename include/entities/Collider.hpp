@@ -2,7 +2,6 @@
 # define COLLIDER_HPP
 
 # include <SFML/Graphics.hpp>
-# include "Arena.hpp"
 
 struct Shadow
 {
@@ -22,7 +21,7 @@ class Collider
     void updateCollider();
 
     // Boundary & Collisions
-    void boundInWalls(const Arena &arena);
+    void boundInWalls(std::vector<sf::FloatRect> walls);
     const bool isColliding(
       const Collider &other,
       sf::Vector2f *offset = nullptr) const;

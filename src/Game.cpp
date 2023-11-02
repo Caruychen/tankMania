@@ -6,8 +6,8 @@ Game::Game():
   m_window("Tank Mania!", sf::Vector2u(1200, 675)),
   m_arena(Arena("assets/maps/map_00.txt"))
 {
-  this->_setupPlayers();
   this->m_arena.load();
+  this->_setupPlayers();
 }
 
 Game::~Game()
@@ -49,14 +49,16 @@ void Game::restartClock()
 // Private methods
 void Game::_setupPlayers()
 {
+  std::pair<PlayerConfigs, PlayerConfigs> playerConfigs = this->m_arena.getPlayerConfigs();
+
   this->m_players.first = std::unique_ptr<Player>(new Player(
     1,
     "assets/tanks/blueTank.png",
-    sf::Vector2f(0, 0),
+    playerConfigs.first.spawnPos,
     &this->m_elapsed));
   this->m_players.second = std::unique_ptr<Player>(new Player(
     2,
     "assets/tanks/redTank.png",
-    sf::Vector2f(1200, 0),
+    playerConfigs.second.spawnPos,
     &this->m_elapsed));
 }

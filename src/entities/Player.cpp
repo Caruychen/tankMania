@@ -10,9 +10,9 @@ Player::Player(
   m_number(number)
 {
   if (number == 1)
-    this->m_sprite.setRotation(0);
+    this->m_sprite.setRotation(90);
   else if (number == 2)
-    this->m_sprite.setRotation(0);
+    this->m_sprite.setRotation(270);
   this->_setupKeyBindings();
 }
 

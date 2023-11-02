@@ -43,7 +43,7 @@ void Entity::updateEntity(const Arena &arena)
 {
   this->updateCollider();
   this->boundInArena(arena);
-  this->boundInWalls(arena);
+  this->boundInWalls(arena.getWalls());
 }
 
 void Entity::boundInArena(const Arena &arena)

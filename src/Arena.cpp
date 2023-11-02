@@ -7,6 +7,8 @@ Arena::Arena(const std::string &mapFile) : m_arenaSize(ARENA_WIDTH, ARENA_HEIGHT
   this->m_colors.push_back(sf::Color::White);
   this->m_colors.push_back(sf::Color::Blue);
   this->m_colors.push_back(sf::Color::Red);
+  this->m_colors.push_back(sf::Color::Blue);
+  this->m_colors.push_back(sf::Color::Red);
   this->_readMap(mapFile);
 }
 
@@ -17,7 +19,7 @@ void Arena::load(void)
 {
   this->_loadTiles();
   this->_loadBounds();
-  this->_loadWalls();
+  this->_loadObjects();
 }
 
 const sf::Vector2u Arena::getSize() const
@@ -32,6 +34,11 @@ const sf::Vector2u Arena::getSize() const
 const std::vector<sf::FloatRect> Arena::getWalls() const
 {
   return this->m_walls;
+}
+
+const std::pair<PlayerConfigs, PlayerConfigs> Arena::getPlayerConfigs() const
+{
+  return this->m_playerConfigs;
 }
 
 void Arena::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -115,7 +122,7 @@ void Arena::_loadBounds(void)
   this->m_bounds[8].color = sf::Color::Blue;
 }
 
-void Arena::_loadWalls(void)
+void Arena::_loadObjects(void)
 {
   unsigned int tileNumber;
   sf::FloatRect rect;
@@ -127,22 +134,29 @@ void Arena::_loadWalls(void)
       tileNumber = this->m_data[x + y * m_widthInTiles];
       if (tileNumber < 1)
         continue;
-      rect = sf::FloatRect(
-        x * m_tileSize.x,
-        y * m_tileSize.y,
-        m_tileSize.x,
-        m_tileSize.y);
+      sf::Vector2f pos = sf::Vector2f(x * m_tileSize.x, y * m_tileSize.y);
+      sf::Vector2f size = sf::Vector2f(m_tileSize.x, m_tileSize.y);
+      rect = sf::FloatRect(pos, size);
       switch (TileType(tileNumber))
       {
         case TileType::WALL:
           this->m_walls.push_back(rect);
           break;
+        case TileType::FLAG_ONE:
+          this->m_playerConfigs.first.flagPos = pos;
         case TileType::ZONE_ONE:
-          this->m_playerConfigs.first.zones.push_back(rect);
+          this->m_playerConfigs.first.zones.push_back(Collider(rect));
           break;
+        case TileType::FLAG_TWO:
+          this->m_playerConfigs.second.flagPos = pos;
         case TileType::ZONE_TWO:
-          this->m_playerConfigs.first.zones.push_back(rect);
+          this->m_playerConfigs.second.zones.push_back(Collider(rect));
           break;
+        case TileType::PLAYER_ONE:
+          this->m_playerConfigs.first.spawnPos = {pos.x + m_tileSize.x / 2, pos.y + m_tileSize.y / 2};
+          break;
+        case TileType::PLAYER_TWO:
+          this->m_playerConfigs.second.spawnPos = {pos.x + m_tileSize.x / 2, pos.y + m_tileSize.y / 2};
         default:
           break;
       }

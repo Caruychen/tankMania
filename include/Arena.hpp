@@ -2,6 +2,7 @@
 # define ARENA_HPP
 
 # include <SFML/Graphics.hpp>
+# include "Collider.hpp"
 
 # define ARENA_WIDTH 1200
 # define ARENA_HEIGHT 600
@@ -20,9 +21,9 @@ enum class TileType
 
 struct PlayerConfigs
 {
-    sf::Vector2f tankPos;
+    std::vector<Collider> zones;
     sf::Vector2f flagPos;
-    std::vector<sf::FloatRect> zones;
+    sf::Vector2f spawnPos;
 };
 
 class Arena : public sf::Drawable
@@ -33,13 +34,14 @@ class Arena : public sf::Drawable
     void load(void);
     const sf::Vector2u getSize() const;
     const std::vector<sf::FloatRect> getWalls() const;
+    const std::pair<PlayerConfigs, PlayerConfigs> getPlayerConfigs() const;
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void _readMap(const std::string& mapFile);
     void _loadTiles(void);
     void _loadBounds(void);
-    void _loadWalls(void);
+    void _loadObjects(void);
 
     std::vector<unsigned int> m_data;
     std::vector<sf::FloatRect> m_walls;
