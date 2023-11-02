@@ -13,11 +13,11 @@ Entity::Entity(
 {
   if (!this->m_texture.loadFromFile(texturePath))
     std::cerr << "Error loading texture: " << texturePath << std::endl;
+  int size = std::min(this->m_texture.getSize().x, this->m_texture.getSize().y);
+  this->m_sprite.setTextureRect(sf::IntRect(0, 0, size, size));
   this->m_sprite.setTexture(this->m_texture);
   this->m_sprite.setPosition(pos);
-  this->m_sprite.setOrigin(
-    this->m_texture.getSize().x / 2,
-    this->m_texture.getSize().y / 2);
+  this->m_sprite.setOrigin(size / 2, size / 2);
   this->m_sprite.setScale(scale.x, scale.y);
   this->initCollider();
 }
