@@ -3,6 +3,10 @@
 
 Arena::Arena(const std::string &mapFile) : m_arenaSize(ARENA_WIDTH, ARENA_HEIGHT)
 {
+  this->m_colors.push_back(sf::Color::Black);
+  this->m_colors.push_back(sf::Color::White);
+  this->m_colors.push_back(sf::Color::Blue);
+  this->m_colors.push_back(sf::Color::Red);
   this->_readMap(mapFile);
 }
 
@@ -63,7 +67,6 @@ void Arena::_loadTiles(void)
 
   this->m_vertices.setPrimitiveType(sf::Triangles);
   this->m_vertices.resize(m_widthInTiles * m_heightInTiles * 6);
-  sf::Color colors[2] = {sf::Color::Black, sf::Color::White};
 
   for (unsigned int x = 0; x < m_widthInTiles; ++x)
   {
@@ -79,12 +82,12 @@ void Arena::_loadTiles(void)
       triangles[4].position = sf::Vector2f((x + 1) * m_tileSize.x, y * m_tileSize.y);
       triangles[5].position = sf::Vector2f((x + 1) * m_tileSize.x, (y + 1) * m_tileSize.y);
 
-      triangles[0].color = colors[tileNumber];
-      triangles[1].color = colors[tileNumber];
-      triangles[2].color = colors[tileNumber];
-      triangles[3].color = colors[tileNumber];
-      triangles[4].color = colors[tileNumber];
-      triangles[5].color = colors[tileNumber];
+      triangles[0].color = this->m_colors[tileNumber];
+      triangles[1].color = this->m_colors[tileNumber];
+      triangles[2].color = this->m_colors[tileNumber];
+      triangles[3].color = this->m_colors[tileNumber];
+      triangles[4].color = this->m_colors[tileNumber];
+      triangles[5].color = this->m_colors[tileNumber];
     }
   }
 }
@@ -129,7 +132,20 @@ void Arena::_loadWalls(void)
         y * m_tileSize.y,
         m_tileSize.x,
         m_tileSize.y);
-      this->m_walls.push_back(rect);
+      switch (tileNumber)
+      {
+        case 1:
+          this->m_walls.push_back(rect);
+          break;
+        case 2:
+          this->m_zones.first.push_back(rect);
+          break;
+        case 3:
+          this->m_zones.second.push_back(rect);
+          break;
+        default:
+          break;
+      }
     }
   }
 }
