@@ -39,7 +39,7 @@ void Player::checkCollisions(std::unique_ptr<Player> &other)
 {
   this->updateCollider();
   this->offsetCollision(other->getCollider());
-  //this->checkZoneCollision(other);
+  this->checkZoneCollision(other);
 }
 
 void Player::checkZoneCollision(std::unique_ptr<Player> &other)
