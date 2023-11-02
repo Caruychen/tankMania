@@ -11,7 +11,8 @@ Entity::Entity(
   m_name(name), m_incrementSpeed(incrementSpeed), m_rotationSpeed(200), m_elapsed(elapsed),
   Collider(&this->m_sprite)
 {
-  this->m_texture.loadFromFile(texturePath);
+  if (!this->m_texture.loadFromFile(texturePath))
+    std::cerr << "Error loading texture: " << texturePath << std::endl;
   this->m_sprite.setTexture(this->m_texture);
   this->m_sprite.setPosition(pos);
   this->m_sprite.setOrigin(
