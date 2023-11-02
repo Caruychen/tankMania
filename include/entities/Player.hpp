@@ -50,6 +50,7 @@ class Player : public Tank
 
   private:
     void _setupKeyBindings();
+    void _initHealth();
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     const unsigned int m_number;
     sf::Keyboard::Key m_forward;

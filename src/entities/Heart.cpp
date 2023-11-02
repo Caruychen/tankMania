@@ -13,10 +13,23 @@ Heart::Heart(
     1,
     nullptr)
 {
-  this->m_sprite.setTexture(this->m_texture);
+  this->resetTexture();
   this->m_sprite.setOrigin(0, 0);
-  //this->m_sprite.setTextureRect(sf::IntRect(0, 0, 13, 13));
 }
 
 Heart::~Heart()
 {}
+
+void Heart::setAlive(const bool &isAlive)
+{
+  this->m_isAlive = isAlive;
+}
+
+void Heart::resetTexture(void)
+{
+  this->m_sprite.setTextureRect(sf::IntRect(
+    TEXTURE_SIZE * this->m_isAlive,
+    0,
+    TEXTURE_SIZE,
+    TEXTURE_SIZE));
+}
