@@ -90,7 +90,7 @@ void Game::_updateHeartSpawn(const bool spawn)
     this->_resetHeart();
     return ;
   }
-  if (localClock.getElapsedTime().asSeconds() > 2.0f)
+  if (localClock.getElapsedTime().asSeconds() > 10.0f)
     this->_spawnHeart();
 }
 
