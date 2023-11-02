@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 # define GAME_HPP
 
+# include <random>
 # include <SFML/Graphics.hpp>
 # include "Window.hpp"
 # include "Player.hpp"
@@ -27,13 +28,21 @@ class Game
     void restartClock();
 
   private:
-    void _setupPlayers();
+    void _updateHeartSpawn(const bool spawn);
+    void _spawnPlayers();
+    void _spawnHeart();
+    void _resetHeart();
 
     Window m_window;
     Arena m_arena;
     sf::Clock m_clock;
     sf::Time m_elapsed;
+    std::random_device m_rd;
+    std::mt19937 m_gen;
+    std::uniform_int_distribution<> m_dist;
     std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> m_players;
+    bool m_isHeartSpawned;
+    std::unique_ptr<Heart> m_heart;
 };
 
 #endif

@@ -3,13 +3,14 @@
 
 Heart::Heart(
   const bool &isAlive,
-  const sf::Vector2f &pos) :
+  const sf::Vector2f &pos,
+  const float &scale) :
   m_isAlive(isAlive),
   Entity(
     "Heart",
     "assets/health/hearts.png",
     pos,
-    sf::Vector2f(HEART_SCALE, HEART_SCALE),
+    sf::Vector2f(scale, scale),
     1,
     nullptr)
 {

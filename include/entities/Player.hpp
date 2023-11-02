@@ -46,12 +46,14 @@ class Player : public Tank
     void handleInput(void);
     void checkCollisions(std::unique_ptr<Player> &other);
     void checkZoneCollision(std::unique_ptr<Player> &other);
+    const bool checkHeartCollision(std::unique_ptr<Heart> &heart);
     void takeDamage(void);
     std::vector<Collider> getZones(void) const;
 
   private:
     void _setupKeyBindings();
     void _initHealth();
+    const bool _addHealth();
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     const unsigned int m_number;
     sf::Keyboard::Key m_forward;

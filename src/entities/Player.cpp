@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include <iostream>
 
 Player::Player(
   const unsigned int &number,
@@ -49,6 +50,15 @@ void Player::checkZoneCollision(std::unique_ptr<Player> &other)
   const bool otherZone = this->isCollidingGroup(other->getZones());
 }
 
+const bool Player::checkHeartCollision(std::unique_ptr<Heart> &heart)
+{
+  if (heart == nullptr)
+    return false;
+  if (!this->isColliding(heart->getCollider()))
+    return false;
+  return this->_addHealth();
+}
+
 void Player::takeDamage()
 {
   if (this->m_health.current <= 0)
@@ -56,7 +66,7 @@ void Player::takeDamage()
   this->m_health.current--;
   this->m_health.hearts[this->m_health.current]->setAlive(false);
   this->m_health.hearts[this->m_health.current]->resetTexture();
-  }
+}
 
 std::vector<Collider> Player::getZones() const
 {
@@ -77,7 +87,7 @@ void Player::_initHealth()
   this->m_health.current = INITIAL_HEALTH;
   this->m_health.max = MAX_HEALTH;
   float textureSpacing = HEART_TEXTURE_SIZE * 4;
-  const float scaledWidth = HEART_TEXTURE_SIZE * HEART_SCALE / 2;
+  const float scaledWidth = HEART_TEXTURE_SIZE * DEFAULT_HEART_SCALE / 2;
   const float padding = 10;
 
   for (unsigned int i = 0; i < this->m_health.max; i++)
@@ -90,6 +100,16 @@ void Player::_initHealth()
         i < m_health.current,
         sf::Vector2f(heartX, heartY))));
   }
+}
+
+const bool Player::_addHealth()
+{
+  if (this->m_health.current >= this->m_health.max)
+    return false;
+  this->m_health.hearts[this->m_health.current]->setAlive(true);
+  this->m_health.hearts[this->m_health.current]->resetTexture();
+  this->m_health.current++;
+  return true;
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
