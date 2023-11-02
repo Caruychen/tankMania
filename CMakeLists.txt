@@ -23,6 +23,7 @@ set(HEADER_FILES
   include/entities/Entity.hpp
   include/entities/Tank.hpp
   include/entities/Player.hpp
+  include/entities/Heart.hpp
 )
 
 set(SOURCE_FILES
@@ -34,6 +35,7 @@ set(SOURCE_FILES
   src/entities/Entity.cpp
   src/entities/Tank.cpp
   src/entities/Player.cpp
+  src/entities/Heart.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})

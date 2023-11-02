@@ -2,7 +2,11 @@
 # define PLAYER_HPP
 
 # include "Tank.hpp"
+# include "Heart.hpp"
+
 # define MOVEMENT_SPEED 180
+# define MAX_HEALTH 5
+# define INITIAL_HEALTH 3
 
 enum class P1
 {
@@ -22,6 +26,13 @@ enum class P2
   SHOOT = sf::Keyboard::Space
 };
 
+struct Health
+{
+  unsigned int current;
+  unsigned int max;
+  std::vector<std::unique_ptr<Heart>> hearts;
+};
+
 class Player : public Tank
 {
   public:
@@ -39,12 +50,14 @@ class Player : public Tank
 
   private:
     void _setupKeyBindings();
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     const unsigned int m_number;
     sf::Keyboard::Key m_forward;
     sf::Keyboard::Key m_backward;
     sf::Keyboard::Key m_left;
     sf::Keyboard::Key m_right;
     sf::Keyboard::Key m_shoot;
+    Health m_health;
     const sf::Vector2f m_spawnPos;
     const float m_spawnRotation;
     const sf::Vector2f m_flagPos;

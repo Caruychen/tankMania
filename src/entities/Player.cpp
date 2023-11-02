@@ -18,6 +18,10 @@ Player::Player(
 {
   this->m_sprite.setRotation(configs.spawnRotation);
   this->_setupKeyBindings();
+  this->m_health.current = INITIAL_HEALTH;
+  this->m_health.max = MAX_HEALTH;
+  for (unsigned int i = 0; i < this->m_health.max; i++)
+    this->m_health.hearts.push_back(std::unique_ptr<Heart>(new Heart(true, sf::Vector2f(i * 50, 300 + 50 * i))));
 }
 
 Player::~Player()
@@ -60,4 +64,11 @@ void Player::_setupKeyBindings()
   this->m_left = m_number == 1 ? (sf::Keyboard::Key) P1::LEFT : (sf::Keyboard::Key) P2::LEFT;
   this->m_right = m_number == 1 ? (sf::Keyboard::Key) P1::RIGHT : (sf::Keyboard::Key) P2::RIGHT;
   this->m_shoot = m_number == 1 ? (sf::Keyboard::Key) P1::SHOOT : (sf::Keyboard::Key) P2::SHOOT;
+}
+
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+  target.draw(this->m_sprite, states);
+  for (auto &heart : this->m_health.hearts)
+    target.draw(*heart, states);
 }
