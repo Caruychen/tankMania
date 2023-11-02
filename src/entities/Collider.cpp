@@ -1,5 +1,6 @@
 #include "Collider.hpp"
 #include <cmath>
+#include <math.h>
 
 Collider::Collider() : m_spritePtr(nullptr)
 {}
