@@ -9,7 +9,7 @@ Collider::Collider(sf::Sprite *spritePtr) : m_spritePtr(spritePtr)
 
 Collider::Collider(const sf::FloatRect &wall)
 {
-  Vec2d localCenter = {wall.width / 2, wall.height / 2};
+  sf::Vector2f localCenter = {wall.width / 2, wall.height / 2};
   this->m_localCorners.push_back({-localCenter.x, -localCenter.y});
   this->m_localCorners.push_back({localCenter.x, -localCenter.y});
   this->m_localCorners.push_back({localCenter.x, localCenter.y});
@@ -50,7 +50,7 @@ void Collider::_updateCollider()
 {
   if (this->m_spritePtr == nullptr)
     return;
-  const std::vector<Vec2d> lCorners = this->m_localCorners;
+  const std::vector<sf::Vector2f> lCorners = this->m_localCorners;
   const sf::Vector2f pos = this->m_spritePtr->getPosition();
   const float angle = this->m_spritePtr->getRotation() * M_PI / 180;
 
@@ -64,10 +64,10 @@ void Collider::_updateCollider()
   this->m_pos = pos;
 }
 
-const Shadow Collider::_castOnAxis(const Vec2d projectedAxis) const
+const Shadow Collider::_castOnAxis(const sf::Vector2f projectedAxis) const
 {
   Shadow shadow = {INFINITY, -INFINITY};
-  std::vector<Vec2d> gCorners = this->m_globalCorners;
+  std::vector<sf::Vector2f> gCorners = this->m_globalCorners;
   int size = gCorners.size();
 
   for (int cornerIndex = 0; cornerIndex < size; ++cornerIndex)
@@ -81,12 +81,12 @@ const Shadow Collider::_castOnAxis(const Vec2d projectedAxis) const
 
 const bool Collider::_intersects(const Collider &other, float *overlap) const
 {
-  std::vector<Vec2d> gCorners = this->m_globalCorners;
+  std::vector<sf::Vector2f> gCorners = this->m_globalCorners;
 
   for (int i = 0; i < gCorners.size(); ++i)
   {
     int j = (i + 1) % gCorners.size();
-    Vec2d projectedAxis = {gCorners[j].y - gCorners[i].y, -(gCorners[j].x - gCorners[i].x)};
+    sf::Vector2f projectedAxis = {gCorners[j].y - gCorners[i].y, -(gCorners[j].x - gCorners[i].x)};
     float div = sqrtf(projectedAxis.x * projectedAxis.x + projectedAxis.y * projectedAxis.y);
 		projectedAxis = { projectedAxis.x / div, projectedAxis.y / div }; //Normalize
 
@@ -104,7 +104,7 @@ const bool Collider::_intersects(const Collider &other, float *overlap) const
 const bool Collider::_isColliding(const Collider &other, sf::Vector2f *offset) const
 {
   float overlap = INFINITY;
-  Vec2d vecDistance;
+  sf::Vector2f vecDistance;
   float salarDistance;
 
   if (!(this->_intersects(other, &overlap) && other._intersects(*this, &overlap)))

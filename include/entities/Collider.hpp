@@ -4,12 +4,6 @@
 # include <SFML/Graphics.hpp>
 # include "Arena.hpp"
 
-struct Vec2d
-{
-  float x;
-  float y;
-};
-
 struct Shadow
 {
   float min;
@@ -28,14 +22,14 @@ class Collider
 
   protected:
     void _updateCollider();
-    const Shadow _castOnAxis(const Vec2d axis) const;
+    const Shadow _castOnAxis(const sf::Vector2f axis) const;
     const bool _intersects(const Collider &other, float *overlap) const;
     const bool _isColliding(const Collider &other, sf::Vector2f *offset) const;
     void _boundInWalls(const Arena &arena);
 
   private:
-    std::vector<Vec2d> m_localCorners;
-    std::vector<Vec2d> m_globalCorners;
+    std::vector<sf::Vector2f> m_localCorners;
+    std::vector<sf::Vector2f> m_globalCorners;
     sf::Vector2f m_pos;
     sf::Sprite *m_spritePtr;
 };
