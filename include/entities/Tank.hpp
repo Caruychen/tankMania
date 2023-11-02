@@ -2,6 +2,7 @@
 # define TANK_HPP
 
 # include "Entity.hpp"
+# define TANK_SCALE 0.25f
 
 class Tank : public Entity
 {

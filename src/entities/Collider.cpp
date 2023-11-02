@@ -1,6 +1,7 @@
 #include "Collider.hpp"
 #include <cmath>
 #include <numbers>
+#include <iostream>
 
 Collider::Collider() : m_spritePtr(nullptr)
 {}
@@ -65,19 +66,41 @@ void Collider::updateCollider()
   this->m_pos = pos;
 }
 
-void Collider::boundInWalls(std::vector<sf::FloatRect> walls)
+Collider Collider::getCollider() const
+{
+  return *this;
+}
+
+void Collider::offsetWallCollisions(std::vector<sf::FloatRect> walls)
 {
   if (this->m_spritePtr == nullptr)
     return;
   for (sf::FloatRect wall: walls)
   {
     Collider wallCollider = Collider(wall);
-    sf::Vector2f offset = {0, 0};
-    if (!this->isColliding(wallCollider, &offset))
-      continue;
-    this->m_spritePtr->move(offset);
-    this->updateCollider();
+    this->offsetCollision(wallCollider);
   }
+}
+
+const bool Collider::isCollidingGroup(std::vector<Collider> colliders) const
+{
+  if (this->m_spritePtr == nullptr)
+    return false;
+  for (Collider collider: colliders)
+  {
+    if (this->isColliding(collider))
+      return true;
+  }
+  return false;
+}
+
+void Collider::offsetCollision(const Collider &other)
+{
+  sf::Vector2f offset = {0, 0};
+  if (!this->isColliding(other, &offset))
+    return;
+  this->m_spritePtr->move(offset);
+  this->updateCollider();
 }
 
 const bool Collider::isColliding(const Collider &other, sf::Vector2f *offset) const

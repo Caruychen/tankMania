@@ -39,11 +39,11 @@ void Entity::rotate(const int direction)
   this->m_sprite.rotate(direction * speed);
 }
 
-void Entity::updateEntity(const Arena &arena)
+void Entity::checkBoundaryCollisions(const Arena &arena)
 {
   this->updateCollider();
   this->boundInArena(arena);
-  this->boundInWalls(arena.getWalls());
+  this->offsetWallCollisions(arena.getWalls());
 }
 
 void Entity::boundInArena(const Arena &arena)

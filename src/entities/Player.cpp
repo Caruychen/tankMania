@@ -1,25 +1,29 @@
 #include "Player.hpp"
-#include <iostream>
 
 Player::Player(
   const unsigned int &number,
   const std::string &texturePath,
-  const sf::Vector2f &pos,
+  const PlayerConfigs configs,
   sf::Time *elapsed) :
-  Tank("Player " + std::to_string(number), texturePath, pos, MOVEMENT_SPEED, elapsed),
-  m_number(number)
+  Tank("Player " + std::to_string(number),
+    texturePath,
+    configs.spawnPos,
+    MOVEMENT_SPEED,
+    elapsed),
+  m_number(number),
+  m_spawnPos(configs.spawnPos),
+  m_flagPos(configs.flagPos),
+  m_zones(configs.zones),
+  m_spawnRotation(configs.spawnRotation)
 {
-  if (number == 1)
-    this->m_sprite.setRotation(90);
-  else if (number == 2)
-    this->m_sprite.setRotation(270);
+  this->m_sprite.setRotation(configs.spawnRotation);
   this->_setupKeyBindings();
 }
 
 Player::~Player()
 {}
 
-void Player::handleInput(const Arena &arena)
+void Player::handleInput(void)
 {
   if (sf::Keyboard::isKeyPressed(this->m_forward))
     this->move(1);
@@ -29,7 +33,24 @@ void Player::handleInput(const Arena &arena)
     this->rotate(-1);
   else if (sf::Keyboard::isKeyPressed(this->m_right))
     this->rotate(1);
-  this->updateEntity(arena);
+}
+
+void Player::checkCollisions(std::unique_ptr<Player> &other)
+{
+  this->updateCollider();
+  this->offsetCollision(other->getCollider());
+  //this->checkZoneCollision(other);
+}
+
+void Player::checkZoneCollision(std::unique_ptr<Player> &other)
+{
+  const bool collidingZoneOne = this->isCollidingGroup(this->m_zones);
+  const bool collidingZoneTwo = this->isCollidingGroup(other->getZones());
+}
+
+std::vector<Collider> Player::getZones() const
+{
+  return this->m_zones;
 }
 
 void Player::_setupKeyBindings()

@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include <iostream>
 
 // Constructors & Destructors
 Game::Game(): 
@@ -27,9 +26,16 @@ sf::Time Game::getElapsed()
 // Public Functions
 void Game::update()
 {
+  std::unique_ptr<Player> &playerOne = this->m_players.first;
+  std::unique_ptr<Player> &playerTwo = this->m_players.second;
+
   this->m_window.update();
-  this->m_players.first->handleInput(this->m_arena);
-  this->m_players.second->handleInput(this->m_arena);
+  playerOne->handleInput();
+  playerTwo->handleInput();
+  playerOne->checkCollisions(playerTwo);
+  playerTwo->checkCollisions(playerOne);
+  playerOne->checkBoundaryCollisions(this->m_arena);
+  playerTwo->checkBoundaryCollisions(this->m_arena);
 }
 
 void Game::render()
@@ -54,11 +60,11 @@ void Game::_setupPlayers()
   this->m_players.first = std::unique_ptr<Player>(new Player(
     1,
     "assets/tanks/blueTank.png",
-    playerConfigs.first.spawnPos,
+    playerConfigs.first,
     &this->m_elapsed));
   this->m_players.second = std::unique_ptr<Player>(new Player(
     2,
     "assets/tanks/redTank.png",
-    playerConfigs.second.spawnPos,
+    playerConfigs.second,
     &this->m_elapsed));
 }

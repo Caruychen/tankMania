@@ -20,6 +20,8 @@ void Arena::load(void)
   this->_loadTiles();
   this->_loadBounds();
   this->_loadObjects();
+  this->m_playerConfigs.first.spawnRotation = 90;
+  this->m_playerConfigs.second.spawnRotation = 270;
 }
 
 const sf::Vector2u Arena::getSize() const

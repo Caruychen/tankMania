@@ -24,6 +24,7 @@ struct PlayerConfigs
     std::vector<Collider> zones;
     sf::Vector2f flagPos;
     sf::Vector2f spawnPos;
+    float spawnRotation;
 };
 
 class Arena : public sf::Drawable

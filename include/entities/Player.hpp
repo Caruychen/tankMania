@@ -28,11 +28,14 @@ class Player : public Tank
     Player(
       const unsigned int &number,
       const std::string &texturePath,
-      const sf::Vector2f &pos,
+      const PlayerConfigs configs,
       sf::Time *elapsed);
     ~Player();
 
-    void handleInput(const Arena &arena);
+    void handleInput(void);
+    void checkCollisions(std::unique_ptr<Player> &other);
+    void checkZoneCollision(std::unique_ptr<Player> &other);
+    std::vector<Collider> getZones(void) const;
 
   private:
     void _setupKeyBindings();
@@ -42,6 +45,10 @@ class Player : public Tank
     sf::Keyboard::Key m_left;
     sf::Keyboard::Key m_right;
     sf::Keyboard::Key m_shoot;
+    const sf::Vector2f m_spawnPos;
+    const float m_spawnRotation;
+    const sf::Vector2f m_flagPos;
+    const std::vector<Collider> m_zones;
 };
 
 #endif

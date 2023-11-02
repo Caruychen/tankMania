@@ -25,11 +25,8 @@ class Entity : public sf::Drawable, public Collider
     void rotate(const int direction);
     
     // Updates & Boundaries
-    void updateEntity(const Arena &arena);
+    void checkBoundaryCollisions(const Arena &arena);
     void boundInArena(const Arena &arena);
-
-  private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
   protected:
     std::string m_name;
@@ -38,6 +35,9 @@ class Entity : public sf::Drawable, public Collider
     sf::Time *m_elapsed;
     int m_incrementSpeed;
     int m_rotationSpeed;
+
+  private:
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
 #endif

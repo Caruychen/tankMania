@@ -19,9 +19,12 @@ class Collider
 
     void initCollider();
     void updateCollider();
+    Collider getCollider() const;
 
     // Boundary & Collisions
-    void boundInWalls(std::vector<sf::FloatRect> walls);
+    void offsetWallCollisions(std::vector<sf::FloatRect> walls);
+    const bool isCollidingGroup(std::vector<Collider> colliders) const;
+    void offsetCollision(const Collider &other);
     const bool isColliding(
       const Collider &other,
       sf::Vector2f *offset = nullptr) const;
