@@ -6,7 +6,8 @@ Tank::Tank(
   const sf::Vector2f &pos,
   const int &incrementSpeed,
   sf::Time *elapsed) :
-  Entity(name,
+  Entity(
+    name,
     texturePath,
     pos,
     sf::Vector2f(TANK_SCALE, TANK_SCALE),
