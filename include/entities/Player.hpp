@@ -46,6 +46,7 @@ class Player : public Tank
     void handleInput(void);
     void checkCollisions(std::unique_ptr<Player> &other);
     void checkZoneCollision(std::unique_ptr<Player> &other);
+    void takeDamage(void);
     std::vector<Collider> getZones(void) const;
 
   private:

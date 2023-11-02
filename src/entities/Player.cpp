@@ -45,9 +45,18 @@ void Player::checkCollisions(std::unique_ptr<Player> &other)
 
 void Player::checkZoneCollision(std::unique_ptr<Player> &other)
 {
-  const bool collidingZoneOne = this->isCollidingGroup(this->m_zones);
-  const bool collidingZoneTwo = this->isCollidingGroup(other->getZones());
+  const bool ownZone = this->isCollidingGroup(this->m_zones);
+  const bool otherZone = this->isCollidingGroup(other->getZones());
 }
+
+void Player::takeDamage()
+{
+  if (this->m_health.current <= 0)
+    return;
+  this->m_health.current--;
+  this->m_health.hearts[this->m_health.current]->setAlive(false);
+  this->m_health.hearts[this->m_health.current]->resetTexture();
+  }
 
 std::vector<Collider> Player::getZones() const
 {
