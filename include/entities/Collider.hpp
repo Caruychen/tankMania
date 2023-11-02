@@ -19,15 +19,18 @@ class Collider
     ~Collider();
 
     void initCollider();
+    void updateCollider();
 
-  protected:
-    void _updateCollider();
-    const Shadow _castOnAxis(const sf::Vector2f axis) const;
-    const bool _intersects(const Collider &other, float *overlap) const;
-    const bool _isColliding(const Collider &other, sf::Vector2f *offset) const;
-    void _boundInWalls(const Arena &arena);
+    // Boundary & Collisions
+    void boundInWalls(const Arena &arena);
+    const bool isColliding(
+      const Collider &other,
+      sf::Vector2f *offset = nullptr) const;
 
   private:
+    const bool _intersects(const Collider &other, float *overlap) const;
+    const Shadow _castOnAxis(const sf::Vector2f axis) const;
+
     std::vector<sf::Vector2f> m_localCorners;
     std::vector<sf::Vector2f> m_globalCorners;
     sf::Vector2f m_pos;

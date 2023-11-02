@@ -46,7 +46,7 @@ void Collider::initCollider()
   this->m_pos = this->m_spritePtr->getPosition();
 }
 
-void Collider::_updateCollider()
+void Collider::updateCollider()
 {
   if (this->m_spritePtr == nullptr)
     return;
@@ -64,19 +64,37 @@ void Collider::_updateCollider()
   this->m_pos = pos;
 }
 
-const Shadow Collider::_castOnAxis(const sf::Vector2f projectedAxis) const
+void Collider::boundInWalls(const Arena &arena)
 {
-  Shadow shadow = {INFINITY, -INFINITY};
-  std::vector<sf::Vector2f> gCorners = this->m_globalCorners;
-  int size = gCorners.size();
-
-  for (int cornerIndex = 0; cornerIndex < size; ++cornerIndex)
+  if (this->m_spritePtr == nullptr)
+    return;
+  for (sf::FloatRect wall: arena.getWalls())
   {
-    float dotProd = (gCorners[cornerIndex].x * projectedAxis.x + gCorners[cornerIndex].y * projectedAxis.y);
-    shadow.min = std::min(shadow.min, dotProd);
-    shadow.max = std::max(shadow.max, dotProd);
+    Collider wallCollider = Collider(wall);
+    sf::Vector2f offset = {0, 0};
+    if (!this->isColliding(wallCollider, &offset))
+      continue;
+    this->m_spritePtr->move(offset);
+    this->updateCollider();
   }
-  return shadow;
+}
+
+const bool Collider::isColliding(const Collider &other, sf::Vector2f *offset) const
+{
+  float overlap = INFINITY;
+  sf::Vector2f vecDistance;
+  float scalarDistance;
+
+  if (!(this->_intersects(other, &overlap) && other._intersects(*this, &overlap)))
+    return false;
+  if (offset == nullptr)
+    return true;
+  vecDistance = { other.m_pos.x - this->m_pos.x, other.m_pos.y - this->m_pos.y };
+  scalarDistance = sqrtf(vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y);
+  *offset = {
+    -overlap * vecDistance.x / scalarDistance,
+    -overlap * vecDistance.y / scalarDistance};
+  return true;
 }
 
 const bool Collider::_intersects(const Collider &other, float *overlap) const
@@ -101,33 +119,17 @@ const bool Collider::_intersects(const Collider &other, float *overlap) const
   return true;
 }
 
-const bool Collider::_isColliding(const Collider &other, sf::Vector2f *offset) const
+const Shadow Collider::_castOnAxis(const sf::Vector2f projectedAxis) const
 {
-  float overlap = INFINITY;
-  sf::Vector2f vecDistance;
-  float salarDistance;
+  Shadow shadow = {INFINITY, -INFINITY};
+  std::vector<sf::Vector2f> gCorners = this->m_globalCorners;
+  int size = gCorners.size();
 
-  if (!(this->_intersects(other, &overlap) && other._intersects(*this, &overlap)))
-    return false;
-  vecDistance = { other.m_pos.x - this->m_pos.x, other.m_pos.y - this->m_pos.y };
-  salarDistance = sqrtf(vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y);
-  *offset = {
-    -overlap * vecDistance.x / salarDistance,
-    -overlap * vecDistance.y / salarDistance};
-  return true;
-}
-
-void Collider::_boundInWalls(const Arena &arena)
-{
-  if (this->m_spritePtr == nullptr)
-    return;
-  for (sf::FloatRect wall: arena.getWalls())
+  for (int cornerIndex = 0; cornerIndex < size; ++cornerIndex)
   {
-    Collider wallCollider = Collider(wall);
-    sf::Vector2f offset = {0, 0};
-    if (!this->_isColliding(wallCollider, &offset))
-      continue;
-    this->m_spritePtr->move(offset);
-    this->_updateCollider();
+    float dotProd = (gCorners[cornerIndex].x * projectedAxis.x + gCorners[cornerIndex].y * projectedAxis.y);
+    shadow.min = std::min(shadow.min, dotProd);
+    shadow.max = std::max(shadow.max, dotProd);
   }
+  return shadow;
 }

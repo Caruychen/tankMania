@@ -24,63 +24,29 @@ Entity::Entity(
 Entity::~Entity()
 {}
 
-void Entity::moveForward()
+void Entity::move(const int direction)
 {
-  float angle = this->_getAngleRadians();
-  float x = sin(angle) * this->_getMoveSpeed();
-  float y = cos(angle) * this->_getMoveSpeed();
-  this->m_sprite.move(x, -y);
-  this->_updateCollider();
+  const float speed = this->m_incrementSpeed * this->m_elapsed->asSeconds();
+  const float angle = this->m_sprite.getRotation() * M_PI / 180;
+  const float x = direction * speed * sin(angle);
+  const float y = -direction * speed * cos(angle);
+  this->m_sprite.move(x, y);
 }
 
-void Entity::moveBackward()
+void Entity::rotate(const int direction)
 {
-  float angle = this->_getAngleRadians();
-  float x = sin(angle) * this->_getMoveSpeed();
-  float y = cos(angle) * this->_getMoveSpeed();
-  this->m_sprite.move(-x, y);
-  this->_updateCollider();
+  const float speed = this->m_rotationSpeed * this->m_elapsed->asSeconds();
+  this->m_sprite.rotate(direction * speed);
 }
 
-void Entity::rotateLeft()
+void Entity::updateEntity(const Arena &arena)
 {
-  this->m_sprite.rotate(-this->_getRotationSpeed());
-  this->_updateCollider();
+  this->updateCollider();
+  this->boundInArena(arena);
+  this->boundInWalls(arena);
 }
 
-void Entity::rotateRight()
-{
-  this->m_sprite.rotate(this->_getRotationSpeed());
-  this->_updateCollider();
-}
-
-void Entity::updateBounds(const Arena &arena)
-{
-  this->_boundInArena(arena);
-  this->_boundInWalls(arena);
-}
-
-void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-  target.draw(this->m_sprite, states);
-}
-
-const float Entity::_getMoveSpeed() const
-{
-  return this->m_incrementSpeed * this->m_elapsed->asSeconds();
-}
-
-const float Entity::_getRotationSpeed() const
-{
-  return this->m_rotationSpeed * this->m_elapsed->asSeconds();
-}
-
-const float Entity::_getAngleRadians() const
-{
-  return this->m_sprite.getRotation() * M_PI / 180;
-}
-
-void Entity::_boundInArena(const Arena &arena)
+void Entity::boundInArena(const Arena &arena)
 {
   sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
   const float widthOffset = spriteBounds.width / 2 + BOUNDING_BUFFER;
@@ -95,4 +61,9 @@ void Entity::_boundInArena(const Arena &arena)
     this->m_sprite.setPosition(pos.x, heightOffset);
   else if (spriteBounds.top + spriteBounds.height > arena.getSize().y)
     this->m_sprite.setPosition(pos.x, arena.getSize().y - heightOffset);
+}
+
+void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+  target.draw(this->m_sprite, states);
 }

@@ -20,21 +20,16 @@ class Entity : public sf::Drawable, public Collider
       sf::Time *elapsed);
     ~Entity();
 
-    void moveForward();
-    void moveBackward();
-    void rotateLeft();
-    void rotateRight();
-    void updateBounds(const Arena &arena);
+    // Moement
+    void move(const int direction);
+    void rotate(const int direction);
+    
+    // Updates & Boundaries
+    void updateEntity(const Arena &arena);
+    void boundInArena(const Arena &arena);
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    // Accessors
-    const float _getMoveSpeed() const;
-    const float _getRotationSpeed() const;
-    const float _getAngleRadians() const;
-
-    // Functions
-    void _boundInArena(const Arena &arena);
 
   protected:
     std::string m_name;

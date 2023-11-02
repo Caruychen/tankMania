@@ -22,14 +22,14 @@ Player::~Player()
 void Player::handleInput(const Arena &arena)
 {
   if (sf::Keyboard::isKeyPressed(this->m_forward))
-    this->moveForward();
+    this->move(1);
   else if (sf::Keyboard::isKeyPressed(this->m_backward))
-    this->moveBackward();
+    this->move(-1);
   if (sf::Keyboard::isKeyPressed(this->m_left))
-    this->rotateLeft();
+    this->rotate(-1);
   else if (sf::Keyboard::isKeyPressed(this->m_right))
-    this->rotateRight();
-  this->updateBounds(arena);
+    this->rotate(1);
+  this->updateEntity(arena);
 }
 
 void Player::_setupKeyBindings()
