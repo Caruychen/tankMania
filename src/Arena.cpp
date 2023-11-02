@@ -132,16 +132,16 @@ void Arena::_loadWalls(void)
         y * m_tileSize.y,
         m_tileSize.x,
         m_tileSize.y);
-      switch (tileNumber)
+      switch (TileType(tileNumber))
       {
-        case 1:
+        case TileType::WALL:
           this->m_walls.push_back(rect);
           break;
-        case 2:
-          this->m_zones.first.push_back(rect);
+        case TileType::ZONE_ONE:
+          this->m_playerConfigs.first.zones.push_back(rect);
           break;
-        case 3:
-          this->m_zones.second.push_back(rect);
+        case TileType::ZONE_TWO:
+          this->m_playerConfigs.first.zones.push_back(rect);
           break;
         default:
           break;

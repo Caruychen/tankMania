@@ -6,6 +6,25 @@
 # define ARENA_WIDTH 1200
 # define ARENA_HEIGHT 600
 
+enum class TileType
+{
+    EMPTY = 0,
+    WALL,
+    ZONE_ONE,
+    ZONE_TWO,
+    FLAG_ONE,
+    FLAG_TWO,
+    PLAYER_ONE,
+    PLAYER_TWO
+};
+
+struct PlayerConfigs
+{
+    sf::Vector2f tankPos;
+    sf::Vector2f flagPos;
+    std::vector<sf::FloatRect> zones;
+};
+
 class Arena : public sf::Drawable
 {
   public:
@@ -22,9 +41,9 @@ class Arena : public sf::Drawable
     void _loadBounds(void);
     void _loadWalls(void);
 
-    std::vector<uint8_t> m_data;
+    std::vector<unsigned int> m_data;
     std::vector<sf::FloatRect> m_walls;
-    std::pair<std::vector<sf::FloatRect>, std::vector<sf::FloatRect>> m_zones;
+    std::pair<PlayerConfigs, PlayerConfigs> m_playerConfigs;
     sf::VertexArray m_vertices;
     sf::VertexArray m_bounds;
     sf::Vector2f m_arenaSize;
