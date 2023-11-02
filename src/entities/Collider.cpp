@@ -66,8 +66,9 @@ void Collider::updateCollider()
   this->m_pos = pos;
 }
 
-Collider Collider::getCollider() const
+Collider Collider::getCollider()
 {
+  this->updateCollider();
   return *this;
 }
 

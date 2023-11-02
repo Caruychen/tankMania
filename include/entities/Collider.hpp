@@ -19,7 +19,7 @@ class Collider
 
     void initCollider();
     void updateCollider();
-    Collider getCollider() const;
+    Collider getCollider();
 
     // Boundary & Collisions
     void offsetWallCollisions(std::vector<sf::FloatRect> walls);
