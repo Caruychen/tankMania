@@ -1,5 +1,5 @@
 #include "Arena.hpp"
-#include <iostream>
+#include <cmath>
 
 Arena::Arena(const std::string &mapFile) : m_arenaSize(ARENA_WIDTH, ARENA_HEIGHT)
 {
