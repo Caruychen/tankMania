@@ -6,6 +6,7 @@ Game::Game():
   m_window("Tank Mania!", sf::Vector2u(1200, 675)),
   m_arena(Arena("assets/maps/map_00.txt")),
   m_isHeartSpawned(false),
+  m_isProjectileSpawned(false),
   m_gen(m_rd())
 {
   this->m_arena.load();
@@ -38,11 +39,16 @@ void Game::update()
   playerTwo->update(this->m_arena);
   playerOne->checkCollisions(playerTwo, this->m_arena);
   playerTwo->checkCollisions(playerOne, this->m_arena);
-  if (playerOne->checkCollisionsHeart(this->m_heart))
+  if (playerOne->checkCollisionsPickup(this->m_heart))
     this->_spawnHeart(false);
-  if (playerTwo->checkCollisionsHeart(this->m_heart))
+  if (playerTwo->checkCollisionsPickup(this->m_heart))
     this->_spawnHeart(false);
   this->_spawnHeart(true);
+  if (playerOne->checkCollisionsPickup(this->m_projectile))
+    this->_spawnProjectile(false);
+  if (playerTwo->checkCollisionsPickup(this->m_projectile))
+    this->_spawnProjectile(false);
+  this->_spawnProjectile(true);
 }
 
 void Game::render()
@@ -53,6 +59,8 @@ void Game::render()
   this->m_window.draw(*this->m_players.second);
   if (this->m_isHeartSpawned)
     this->m_window.draw(*this->m_heart);
+  if (this->m_isProjectileSpawned)
+    this->m_window.draw(*this->m_projectile);
   this->m_window.endDraw();
 }
 
@@ -99,4 +107,20 @@ void Game::_spawnHeart(const bool spawn)
 
 void Game::_spawnProjectile(const bool spawn)
 {
+  static float seconds;
+
+  if (!spawn)
+  {
+    seconds = 0.0f;
+    this->m_isProjectileSpawned = false;
+    this->m_projectile.reset();
+    return ;
+  }
+  seconds += this->m_elapsed.asSeconds();
+  if (this->m_isProjectileSpawned || seconds <= 2.0f)
+    return ;
+  this->m_isProjectileSpawned = true;
+  this->m_projectile = std::unique_ptr<Projectile>(
+    new Projectile(
+      1, this->m_arena.getSpaces()[this->m_dist(this->m_gen)],0));
 }
