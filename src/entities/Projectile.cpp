@@ -4,13 +4,12 @@ Projectile::Projectile(
   unsigned int type,
   const sf::Vector2f &pos,
   const float &rotation,
-  const sf::Vector2f &scale,
   sf::Time *elapsed) :
   Entity(
     "assets/projectiles/bullet" + std::to_string(type) + ".png",
     pos,
     rotation,
-    scale,
+    sf::Vector2f(1.f, 1.f),
     400,
     elapsed)
 {}
