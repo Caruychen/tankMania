@@ -15,13 +15,17 @@ Player::Player(
     elapsed),
   m_number(number),
   m_isAlive(true),
+  m_isHoldingFlag(false),
+  m_hasCapturedFlag(false),
   m_spawnPos(configs.spawnPos),
   m_flagPos(configs.flagPos),
   m_zones(configs.zones),
   m_spawnRotation(configs.spawnRotation)
 {
+  /* Flag color is opposite to the Player's own color */
   this->_setupKeyBindings();
   this->_initHealth();
+  this->m_flag = std::make_unique<Flag>(m_number == 1 ? "red" : "blue", m_flagPos);
 }
 
 Player::~Player()
@@ -33,17 +37,19 @@ void Player::update(const Arena &arena)
   this->updateProjectiles(arena);
   if (!this->m_isAlive)
     return;
+  this->_updateFlag();
   this->_handleInput();
 }
 
-void Player::checkCollisions(
+void Player::updateCollisions(
   std::unique_ptr<Player> &other,
   const Arena &arena)
 {
   if (!this->m_isAlive)
     return;
   this->offsetCollision(other->getCollider());
-  this->_checkCollisionsZone(other);
+  this->_checkCollisionFlag();
+  this->_checkCollisionsZone();
   this->_checkCollisionsBoundary(arena);
   this->_checkCollisionsProjectile(other);
 }
@@ -101,25 +107,34 @@ void Player::_handleInput(void)
     this->rotate(1);
 }
 
-void Player::_checkCollisionsZone(std::unique_ptr<Player> &other)
+void Player::_checkCollisionFlag(void)
 {
-  const bool ownZone = this->isCollidingGroup(this->m_zones);
-  const bool otherZone = this->isCollidingGroup(other->getZones());
+  if (m_isHoldingFlag)
+    return ;
+  if (this->isColliding(this->m_flag->getCollider()))
+    m_isHoldingFlag = true;
+}
+
+void Player::_checkCollisionsZone()
+{
+  if (this->m_isHoldingFlag && this->isCollidingGroup(this->m_zones))
+  {
+    this->m_hasCapturedFlag = true;
+    return ;
+  }
 }
 
 void Player::_checkCollisionsProjectile(std::unique_ptr<Player> &other)
 {
   std::vector<std::unique_ptr<Projectile>> &projectiles = other->getProjectiles();
-  const float timeoutOffsetX = m_number == 1 ? -this->getSize().x : this->getSize().x;
   for (int index = 0; index < projectiles.size(); ++index)
   {
     Collider collider = projectiles[index]->getCollider();
     if (!this->isColliding(collider))
       continue;
     this->_takeDamage();
-    this->m_isAlive = false;
-    this->setRotation(this->m_spawnRotation);
-    this->setPos(sf::Vector2f(ARENA_WIDTH / 2 + timeoutOffsetX, ARENA_HEIGHT + 50));
+    this->_dropFlag();
+    this->_die();
     other->deleteProjectile(index);
     return ;
   }
@@ -163,6 +178,14 @@ void Player::_takeDamage()
   this->m_health.hearts[this->m_health.current]->resetTexture();
 }
 
+void Player::_die()
+{
+  const float timeoutOffsetX = m_number == 1 ? -this->getSize().x : this->getSize().x;
+  this->setRotation(this->m_spawnRotation);
+  this->setPos(sf::Vector2f(ARENA_WIDTH / 2 + timeoutOffsetX, ARENA_HEIGHT + 50));
+  this->m_isAlive = false;
+}
+
 void Player::_respawn()
 {
   static float seconds;
@@ -177,9 +200,27 @@ void Player::_respawn()
   seconds = 0;
 }
 
+void Player::_updateFlag(void)
+{
+  auto &flag = this->m_flag;
+  if (!this->m_isHoldingFlag)
+    return ;
+  flag->setPos(this->m_sprite.getPosition());
+  flag->setRotation(this->m_sprite.getRotation());
+}
+
+void Player::_dropFlag(void)
+{
+  auto &flag = this->m_flag;
+  flag->setPos(this->m_flagPos);
+  flag->setRotation(0);
+  this->m_isHoldingFlag = false;
+}
+
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(this->m_sprite, states);
+  target.draw(*this->m_flag);
   for (auto &heart : this->m_health.hearts)
     target.draw(*heart, states);
   for (auto &ammo : this->m_ammunition.ammo)

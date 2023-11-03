@@ -152,12 +152,12 @@ void Arena::_loadObjects(void)
           this->m_walls.push_back(rect);
           break;
         case TileType::FLAG_ONE:
-          this->m_playerConfigs.first.flagPos = pos;
+          this->m_playerConfigs.second.flagPos = posCentered;
         case TileType::ZONE_ONE:
           this->m_playerConfigs.first.zones.push_back(Collider(rect));
           break;
         case TileType::FLAG_TWO:
-          this->m_playerConfigs.second.flagPos = pos;
+          this->m_playerConfigs.first.flagPos = posCentered;
         case TileType::ZONE_TWO:
           this->m_playerConfigs.second.zones.push_back(Collider(rect));
           break;

@@ -38,8 +38,8 @@ void Game::update()
   this->m_window.update();
   playerOne->update(this->m_arena);
   playerTwo->update(this->m_arena);
-  playerOne->checkCollisions(playerTwo, this->m_arena);
-  playerTwo->checkCollisions(playerOne, this->m_arena);
+  playerOne->updateCollisions(playerTwo, this->m_arena);
+  playerTwo->updateCollisions(playerOne, this->m_arena);
   if (playerOne->checkCollisionsPickup(this->m_heart))
     this->_spawnHeart(false);
   if (playerTwo->checkCollisionsPickup(this->m_heart))

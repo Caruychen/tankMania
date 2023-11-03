@@ -1,5 +1,4 @@
 #include "Tank.hpp"
-#include <iostream>
 
 Tank::Tank(
   const unsigned int &number,
