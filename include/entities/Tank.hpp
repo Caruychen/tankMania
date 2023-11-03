@@ -5,6 +5,7 @@
 # include "Projectile.hpp"
 
 # define TANK_SCALE 0.25f
+# define AMMO_DISPLAY_PADDING 15
 # define MAX_AMMO 5
 # define INITIAL_AMMO 1
 

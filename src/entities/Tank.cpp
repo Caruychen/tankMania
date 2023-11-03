@@ -60,16 +60,15 @@ void Tank::deleteProjectile(int index)
 
 void Tank::_addAmmo()
 {
-  if (this->m_ammunition.ammo.size() >= this->m_ammunition.max)
+  unsigned int ammoCount = this->m_ammunition.ammo.size();
+  if (ammoCount >= this->m_ammunition.max)
     return;
-  float padding = 10;
+  float padding = AMMO_DISPLAY_PADDING;
   float y = ARENA_HEIGHT + padding;
   float x = ARENA_WIDTH / 2;
-
-  x += this->m_number == 1 ? - padding : padding;
+  x += this->m_number == 1 ? -padding * (ammoCount + 1): padding* (ammoCount + 1);
   this->m_ammunition.ammo.push_back(
-    std::make_unique<Projectile>(
-      1, sf::Vector2f(x, y), 0, this->m_elapsed));
+    std::make_unique<Projectile>(1, sf::Vector2f(x, y), 0, this->m_elapsed));
 }
 
 void Tank::_initAmmo()
