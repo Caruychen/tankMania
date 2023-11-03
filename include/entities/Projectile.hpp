@@ -10,8 +10,7 @@ class Projectile : public Entity
       unsigned int type,
       const sf::Vector2f &pos,
       const float &rotation,
-      const sf::Vector2f &scale,
-      sf::Time *elapsed);
+      sf::Time *elapsed = nullptr);
     ~Projectile();
       
     bool checkCollisions(const Arena &arena);
