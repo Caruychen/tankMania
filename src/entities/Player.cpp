@@ -48,18 +48,36 @@ void Player::checkCollisions(
   this->_checkCollisionsProjectile(other);
 }
 
-const bool Player::checkCollisionsHeart(std::unique_ptr<Heart> &heart)
+const bool Player::checkCollisionsPickup(std::unique_ptr<Heart> &heart)
 {
   if (heart == nullptr)
     return false;
   if (!this->isColliding(heart->getCollider()))
     return false;
-  return this->_addHealth();
+  if (this->m_health.current >= this->m_health.max)
+    return false;
+  return (this->_addHealth(), true);
+}
+
+const bool Player::checkCollisionsPickup(std::unique_ptr<Projectile> &projectile)
+{
+  if (projectile == nullptr)
+    return false;
+  if (!this->isColliding(projectile->getCollider()))
+    return false;
+  if (this->m_ammunition.ammo.size() >= this->m_health.max)
+    return false;
+  return (this->_addAmmo(), true);
 }
 
 std::vector<Collider> Player::getZones() const
 {
   return this->m_zones;
+}
+
+const sf::Keyboard::Key Player::getShootKey(void) const
+{
+  return this->m_shoot;
 }
 
 void Player::_setupKeyBindings()
@@ -81,8 +99,6 @@ void Player::_handleInput(void)
     this->rotate(-1);
   else if (sf::Keyboard::isKeyPressed(this->m_right))
     this->rotate(1);
-  if (sf::Keyboard::isKeyPressed(this->m_shoot))
-    this->shoot();
 }
 
 void Player::_checkCollisionsZone(std::unique_ptr<Player> &other)
@@ -129,14 +145,13 @@ void Player::_initHealth()
   }
 }
 
-const bool Player::_addHealth()
+void Player::_addHealth()
 {
   if (this->m_health.current >= this->m_health.max)
-    return false;
+    return ;
   this->m_health.hearts[this->m_health.current]->setAlive(true);
   this->m_health.hearts[this->m_health.current]->resetTexture();
   this->m_health.current++;
-  return true;
 }
 
 void Player::_takeDamage()
