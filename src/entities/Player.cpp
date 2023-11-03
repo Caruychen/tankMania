@@ -95,6 +95,21 @@ void Player::_setupKeyBindings()
   this->m_shoot = m_number == 1 ? (sf::Keyboard::Key) P1::SHOOT : (sf::Keyboard::Key) P2::SHOOT;
 }
 
+const unsigned int Player::getHealth(void) const
+{
+  return this->m_health.current;
+}
+
+const bool Player::isHoldingFlag(void) const
+{
+  return this->m_isHoldingFlag;
+}
+
+const bool Player::hasCapturedFlag(void) const
+{
+  return this->m_hasCapturedFlag;
+}
+
 void Player::_handleInput(void)
 {
   if (sf::Keyboard::isKeyPressed(this->m_forward))

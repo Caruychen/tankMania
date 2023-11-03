@@ -51,6 +51,9 @@ class Player : public Tank
     const bool checkCollisionsPickup(std::unique_ptr<Projectile> &projectile);
     std::vector<Collider> getZones(void) const;
     const sf::Keyboard::Key getShootKey(void) const;
+    const unsigned int getHealth(void) const;
+    const bool isHoldingFlag(void) const;
+    const bool hasCapturedFlag(void) const;
 
   private:
     void _setupKeyBindings();

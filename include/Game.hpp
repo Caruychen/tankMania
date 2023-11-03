@@ -31,6 +31,7 @@ class Game
     void _spawnHeart(const bool spawn);
     void _spawnProjectile(const bool spawn);
     void _spawnPlayers();
+    void _checkWinCondition();
 
     Window m_window;
     Arena m_arena;

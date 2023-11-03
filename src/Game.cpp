@@ -36,6 +36,7 @@ void Game::update()
   std::unique_ptr<Player> &playerTwo = this->m_players.second;
 
   this->m_window.update();
+  this->_checkWinCondition();
   playerOne->update(this->m_arena);
   playerTwo->update(this->m_arena);
   playerOne->updateCollisions(playerTwo, this->m_arena);
@@ -124,4 +125,28 @@ void Game::_spawnProjectile(const bool spawn)
   this->m_projectile = std::unique_ptr<Projectile>(
     new Projectile(
       1, this->m_arena.getSpaces()[this->m_dist(this->m_gen)],0));
+}
+
+void Game::_checkWinCondition()
+{
+  std::unique_ptr<Player> &playerOne = this->m_players.first;
+  std::unique_ptr<Player> &playerTwo = this->m_players.second;
+
+  if ((playerOne->hasCapturedFlag() && playerTwo->hasCapturedFlag()) ||
+      (playerOne->getHealth() <= 0 && playerTwo->getHealth() <= 0))
+  {
+    std::cout << "It's a tie!" << std::endl;
+    return ;
+  }
+  if (playerOne->hasCapturedFlag() || playerTwo->getHealth() <= 0)
+  {
+    std::cout << "Player 1 wins!" << std::endl;
+    return ;
+  }
+  if (playerTwo->hasCapturedFlag() || playerOne->getHealth() <= 0)
+  {
+    std::cout << "Player 2 wins!" << std::endl;
+    return ;
+  }
+
 }
