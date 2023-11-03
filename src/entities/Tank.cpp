@@ -23,11 +23,6 @@ Tank::Tank(
 Tank::~Tank()
 {}
 
-std::vector<std::unique_ptr<Projectile>> &Tank::getProjectiles()
-{
-  return this->m_projectiles;
-}
-
 void Tank::shoot()
 {
   if (this->m_ammunition.ammo.empty())
@@ -35,8 +30,14 @@ void Tank::shoot()
   auto &ammo = this->m_ammunition.ammo[0];
   ammo->setRotation(this->m_sprite.getRotation());
   ammo->setPos(this->m_sprite.getPosition());
+
   this->m_projectiles.push_back(std::move(ammo));
   this->m_ammunition.ammo.erase(this->m_ammunition.ammo.begin());
+}
+
+std::vector<std::unique_ptr<Projectile>> &Tank::getProjectiles()
+{
+  return this->m_projectiles;
 }
 
 void Tank::updateProjectiles(const Arena &arena)
@@ -57,14 +58,22 @@ void Tank::deleteProjectile(int index)
   this->m_projectiles.erase(this->m_projectiles.begin() + index);
 }
 
-void Tank::_initAmmo()
+void Tank::_addAmmo()
 {
+  if (this->m_ammunition.ammo.size() >= this->m_ammunition.max)
+    return;
   float padding = 10;
   float y = ARENA_HEIGHT + padding;
   float x = ARENA_WIDTH / 2;
+
   x += this->m_number == 1 ? - padding : padding;
-  this->m_ammunition.max = MAX_AMMO;
   this->m_ammunition.ammo.push_back(
     std::make_unique<Projectile>(
-      1, sf::Vector2f(x, y), 0, sf::Vector2f(1, 1), this->m_elapsed));
+      1, sf::Vector2f(x, y), 0, this->m_elapsed));
+}
+
+void Tank::_initAmmo()
+{
+  this->m_ammunition.max = MAX_AMMO;
+  this->_addAmmo();
 }
