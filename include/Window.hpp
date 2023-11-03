@@ -2,6 +2,7 @@
 # define WINDOW_HPP
 
 # include <SFML/Graphics.hpp>
+# include "Player.hpp"
 # define DEFAULT_WINDOW_WIDTH 1200
 # define DEFAULT_WINDOW_HEIGHT 675
 # define FRAME_RATE_LIMIT 60
@@ -24,6 +25,7 @@ class Window
 
     // Accessors
     const sf::Vector2u getSize() const;
+    void setPlayers(const std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> &players);
     const bool isDone() const;
     const bool isFullScreen() const;
 
@@ -37,6 +39,7 @@ class Window
     sf::Vector2u m_windowSize;
     bool m_isDone;
     bool m_isFullScreen;
+    const std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> *m_players;
 };
 
 # endif

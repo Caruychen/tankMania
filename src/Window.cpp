@@ -41,6 +41,10 @@ void Window::update()
       case sf::Event::KeyPressed:
         if (event.key.code == sf::Keyboard::F5)
           this->toggleFullScreen();
+        if (event.key.code == this->m_players->first->getShootKey())
+          this->m_players->first->shoot();
+        if (event.key.code == this->m_players->second->getShootKey())
+          this->m_players->second->shoot();
         break;
       default:
         break;
@@ -61,6 +65,16 @@ void Window::draw(sf::Drawable &drawable)
 }
 
 // Accessors
+const sf::Vector2u Window::getSize() const
+{
+  return this->m_windowSize;
+}
+
+void Window::setPlayers(const std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> &players)
+{
+  this->m_players = &players;
+}
+
 const bool Window::isDone() const
 {
   return this->m_isDone;
@@ -69,11 +83,6 @@ const bool Window::isDone() const
 const bool Window::isFullScreen() const
 {
   return this->m_isFullScreen;
-}
-
-const sf::Vector2u Window::getSize() const
-{
-  return this->m_windowSize;
 }
 
 // Private methods
