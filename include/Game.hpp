@@ -42,6 +42,8 @@ class Game
     std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> m_players;
     bool m_isHeartSpawned;
     std::unique_ptr<Heart> m_heart;
+    bool m_isProjectileSpawned;
+    std::unique_ptr<Projectile> m_projectile;
 };
 
 #endif
