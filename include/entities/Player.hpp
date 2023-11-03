@@ -46,8 +46,10 @@ class Player : public Tank
 
     void update(const Arena &arena);
     void checkCollisions(std::unique_ptr<Player> &other, const Arena &arena);
-    const bool checkCollisionsHeart(std::unique_ptr<Heart> &heart);
+    const bool checkCollisionsPickup(std::unique_ptr<Heart> &heart);
+    const bool checkCollisionsPickup(std::unique_ptr<Projectile> &projectile);
     std::vector<Collider> getZones(void) const;
+    const sf::Keyboard::Key getShootKey(void) const;
 
   private:
     void _setupKeyBindings();
@@ -55,7 +57,7 @@ class Player : public Tank
     void _checkCollisionsZone(std::unique_ptr<Player> &other);
     void _checkCollisionsProjectile(std::unique_ptr<Player> &other);
     void _initHealth();
-    const bool _addHealth();
+    void _addHealth();
     void _takeDamage(void);
     void _respawn(void);
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
