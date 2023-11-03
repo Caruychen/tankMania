@@ -100,7 +100,7 @@ void Game::_spawnHeart(const bool spawn)
     return ;
   }
   seconds += this->m_elapsed.asSeconds();
-  if (this->m_isHeartSpawned || seconds <= 2.0f)
+  if (this->m_isHeartSpawned || seconds <= HEART_SPAWN_RATE)
     return ;
   this->m_isHeartSpawned = true;
   this->m_heart = std::unique_ptr<Heart>(
@@ -119,7 +119,7 @@ void Game::_spawnProjectile(const bool spawn)
     return ;
   }
   seconds += this->m_elapsed.asSeconds();
-  if (this->m_isProjectileSpawned || seconds <= 2.0f)
+  if (this->m_isProjectileSpawned || seconds <= PROJECTILE_SPAWN_RATE)
     return ;
   this->m_isProjectileSpawned = true;
   this->m_projectile = std::unique_ptr<Projectile>(

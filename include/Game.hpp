@@ -7,6 +7,9 @@
 # include "Player.hpp"
 # include "Arena.hpp"
 
+# define HEART_SPAWN_RATE 15.f
+# define PROJECTILE_SPAWN_RATE 2.f
+
 /*
 * Game class acts as basic game engine.
 */
