@@ -30,10 +30,10 @@ Player::~Player()
 void Player::update(const Arena &arena)
 {
   this->_respawn();
+  this->updateProjectiles(arena);
   if (!this->m_isAlive)
     return;
   this->_handleInput();
-  this->updateProjectiles(arena);
 }
 
 void Player::checkCollisions(
@@ -94,6 +94,7 @@ void Player::_checkCollisionsZone(std::unique_ptr<Player> &other)
 void Player::_checkCollisionsProjectile(std::unique_ptr<Player> &other)
 {
   std::vector<std::unique_ptr<Projectile>> &projectiles = other->getProjectiles();
+  const float timeoutOffsetX = m_number == 1 ? -this->getSize().x : this->getSize().x;
   for (int index = 0; index < projectiles.size(); ++index)
   {
     Collider collider = projectiles[index]->getCollider();
@@ -101,8 +102,8 @@ void Player::_checkCollisionsProjectile(std::unique_ptr<Player> &other)
       continue;
     this->_takeDamage();
     this->m_isAlive = false;
-    this->setPos(sf::Vector2f(ARENA_WIDTH / 2, ARENA_HEIGHT + 20));
     this->setRotation(this->m_spawnRotation);
+    this->setPos(sf::Vector2f(ARENA_WIDTH / 2 + timeoutOffsetX, ARENA_HEIGHT + 20));
     other->deleteProjectile(index);
     return ;
   }

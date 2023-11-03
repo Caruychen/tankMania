@@ -67,6 +67,13 @@ void Entity::setRotation(float rotation)
   this->initCollider();
 }
 
+sf::Vector2f Entity::getSize() const
+{
+  sf::FloatRect rect = this->m_sprite.getLocalBounds();
+  const sf::Vector2f scale = this->m_sprite.getScale();
+  return {rect.width * scale.x, rect.height * scale.y};
+}
+
 void Entity::_checkCollisionsBoundary(const Arena &arena)
 {
   this->_boundInArena(arena);
