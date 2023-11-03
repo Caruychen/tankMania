@@ -31,8 +31,9 @@ class Arena : public sf::Drawable
 {
   public:
     Arena(const std::string &mapFile);
+    Arena(const std::vector<std::string> &mapFiles);
     ~Arena();
-    void load(void);
+    void load(unsigned int mapNumber);
     const sf::Vector2u getSize() const;
     const std::vector<sf::FloatRect> getWalls() const;
     const std::pair<PlayerConfigs, PlayerConfigs> getPlayerConfigs() const;
@@ -40,11 +41,13 @@ class Arena : public sf::Drawable
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void _initColors(void);
     void _readMap(const std::string& mapFile);
     void _loadTiles(void);
     void _loadBounds(void);
     void _loadObjects(void);
 
+    std::vector<std::string> m_mapFiles;
     std::vector<unsigned int> m_data;
     std::vector<sf::FloatRect> m_walls;
     std::pair<PlayerConfigs, PlayerConfigs> m_playerConfigs;

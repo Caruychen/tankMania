@@ -14,6 +14,13 @@
 * Game class acts as basic game engine.
 */
 
+enum class GameState
+{
+  Menu,
+  Playing,
+  GameOver
+};
+
 class Game
 {
   public:
@@ -31,6 +38,8 @@ class Game
     void restartClock();
 
   private:
+    void _initText(sf::Text *text);
+    void _loadGame(unsigned int mapNumber);
     void _spawnHeart(const bool spawn);
     void _spawnProjectile(const bool spawn);
     void _spawnPlayers();
@@ -38,6 +47,9 @@ class Game
 
     Window m_window;
     Arena m_arena;
+    GameState m_gameState;
+    sf::Text m_gameOverText;
+    sf::Text m_menuText;
     sf::Clock m_clock;
     sf::Time m_elapsed;
     std::random_device m_rd;

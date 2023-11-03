@@ -1,14 +1,29 @@
 #include "Window.hpp"
+#include <iostream>
 
 // Constructors & Destructors
-Window::Window()
+Window::Window() :
+  m_windowTitle("Window"),
+  m_windowSize(sf::Vector2u(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)),
+  m_isFullScreen(false),
+  m_isDone(false),
+  m_players(nullptr)
 {
-  this->_setup("Window", sf::Vector2u(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT));
+  if(!this->m_font.loadFromFile("assets/fonts/ArcadeClassic.ttf"))
+    throw std::runtime_error("Could not load font");
+  this->_create();
 }
 
-Window::Window(const std::string &title, const sf::Vector2u &size)
+Window::Window(const std::string &title, const sf::Vector2u &size) :
+  m_windowTitle(title),
+  m_windowSize(size),
+  m_isFullScreen(false),
+  m_isDone(false),
+  m_players(nullptr)
 {
-  this->_setup(title, size);
+  if(!this->m_font.loadFromFile("assets/fonts/ArcadeClassic.ttf"))
+    throw std::runtime_error("Could not load font");
+  this->_create();
 }
 
 Window::~Window()
@@ -27,7 +42,7 @@ void Window::endDraw()
   this->m_window.display();
 }
 
-void Window::update()
+void Window::pollEvents(unsigned int *mapNumber)
 {
   sf::Event event;
 
@@ -41,6 +56,16 @@ void Window::update()
       case sf::Event::KeyPressed:
         if (event.key.code == sf::Keyboard::F5)
           this->toggleFullScreen();
+        if (event.key.code == sf::Keyboard::Num1)
+          *mapNumber = 1;
+        if (event.key.code == sf::Keyboard::Num2)
+          *mapNumber = 2;
+        if (event.key.code == sf::Keyboard::Num3)
+          *mapNumber = 3;
+        if (event.key.code == sf::Keyboard::Num4)
+          *mapNumber = 4;
+        if (m_players == nullptr)
+          break;
         if (event.key.code == this->m_players->first->getShootKey())
           this->m_players->first->shoot();
         if (event.key.code == this->m_players->second->getShootKey())
@@ -75,6 +100,11 @@ void Window::setPlayers(const std::pair<std::unique_ptr<Player>, std::unique_ptr
   this->m_players = &players;
 }
 
+sf::Font &Window::getFont()
+{
+  return this->m_font;
+}
+
 const bool Window::isDone() const
 {
   return this->m_isDone;
@@ -86,15 +116,6 @@ const bool Window::isFullScreen() const
 }
 
 // Private methods
-void Window::_setup(const std::string &title, const sf::Vector2u &size)
-{
-  this->m_windowTitle = title;
-  this->m_windowSize = size;
-  this->m_isFullScreen = false;
-  this->m_isDone = false;
-  this->_create();
-}
-
 void Window::_create()
 {
   auto style = (this->m_isFullScreen ? sf::Style::Fullscreen : sf::Style::Default);

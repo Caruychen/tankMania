@@ -3,20 +3,23 @@
 
 Arena::Arena(const std::string &mapFile) : m_arenaSize(ARENA_WIDTH, ARENA_HEIGHT)
 {
-  this->m_colors.push_back(sf::Color::Black);
-  this->m_colors.push_back(sf::Color::White);
-  this->m_colors.push_back(sf::Color::Blue);
-  this->m_colors.push_back(sf::Color::Red);
-  this->m_colors.push_back(sf::Color::Blue);
-  this->m_colors.push_back(sf::Color::Red);
-  this->_readMap(mapFile);
+  this->_initColors();
+  this->m_mapFiles.push_back(mapFile);
+}
+
+Arena::Arena(const std::vector<std::string> &mapFiles) : m_arenaSize(ARENA_WIDTH, ARENA_HEIGHT)
+{
+  this->_initColors();
+  this->m_mapFiles = mapFiles;
 }
 
 Arena::~Arena()
 {}
 
-void Arena::load(void)
+void Arena::load(unsigned int mapNumber)
 {
+  mapNumber = --mapNumber % this->m_mapFiles.size();
+  this->_readMap(this->m_mapFiles[mapNumber]);
   this->_loadTiles();
   this->_loadBounds();
   this->_loadObjects();
@@ -52,6 +55,16 @@ void Arena::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(m_vertices, states);
   target.draw(m_bounds, states);
+}
+
+void Arena::_initColors(void)
+{
+  this->m_colors.push_back(sf::Color::Black);
+  this->m_colors.push_back(sf::Color::White);
+  this->m_colors.push_back(sf::Color::Blue);
+  this->m_colors.push_back(sf::Color::Red);
+  this->m_colors.push_back(sf::Color::Blue);
+  this->m_colors.push_back(sf::Color::Red);
 }
 
 void  Arena::_readMap(const std::string& mapFile)

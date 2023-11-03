@@ -3,16 +3,23 @@
 
 // Constructors & Destructors
 Game::Game(): 
-  m_window("Tank Mania!", sf::Vector2u(1200, 675)),
+  m_window("Tank Mania!", sf::Vector2u(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)),
   m_arena(Arena("assets/maps/map_00.txt")),
   m_isHeartSpawned(false),
   m_isProjectileSpawned(false),
+  m_gameState(GameState::Menu),
   m_gen(m_rd())
 {
-  this->m_arena.load();
-  this->_spawnPlayers();
-  this->m_window.setPlayers(this->m_players);
-  this->m_dist = std::uniform_int_distribution<>(0, this->m_arena.getSpaces().size() - 1);
+  this->_initText(&this->m_menuText);
+  this->_initText(&this->m_gameOverText);
+  this->m_menuText.setString(
+    "Welcome to Tank Mania!\n\n" \
+    "Press 1  2  3  or  4  to open an arena\n" \
+    "Press F5 to toggle fullscreen\n");
+  sf::FloatRect textRect = this->m_menuText.getLocalBounds();
+  this->m_menuText.setPosition(
+    (ARENA_WIDTH - textRect.width) / 2,
+    ARENA_HEIGHT / 2 - textRect.height);
 }
 
 Game::~Game()
@@ -32,10 +39,26 @@ sf::Time Game::getElapsed()
 // Public Functions
 void Game::update()
 {
+  unsigned int mapNumber = 0;
+
+  this->m_window.pollEvents(&mapNumber);
+  switch (this->m_gameState)
+  {
+    case GameState::Menu:
+      if (mapNumber)
+        this->_loadGame(mapNumber);
+      return ;
+    case GameState::Playing:
+      break ;
+    case GameState::GameOver:
+      return ;
+    default:
+      break ;
+  }
+
   std::unique_ptr<Player> &playerOne = this->m_players.first;
   std::unique_ptr<Player> &playerTwo = this->m_players.second;
 
-  this->m_window.update();
   this->_checkWinCondition();
   playerOne->update(this->m_arena);
   playerTwo->update(this->m_arena);
@@ -56,13 +79,26 @@ void Game::update()
 void Game::render()
 {
   this->m_window.beginDraw();
-  this->m_window.draw(this->m_arena);
-  this->m_window.draw(*this->m_players.first);
-  this->m_window.draw(*this->m_players.second);
-  if (this->m_isHeartSpawned)
-    this->m_window.draw(*this->m_heart);
-  if (this->m_isProjectileSpawned)
-    this->m_window.draw(*this->m_projectile);
+  switch (this->m_gameState)
+  {
+    case GameState::Menu:
+      this->m_window.draw(this->m_menuText);
+      break;
+    case GameState::Playing:
+      this->m_window.draw(this->m_arena);
+      this->m_window.draw(*this->m_players.first);
+      this->m_window.draw(*this->m_players.second);
+      if (this->m_isHeartSpawned)
+        this->m_window.draw(*this->m_heart);
+      if (this->m_isProjectileSpawned)
+        this->m_window.draw(*this->m_projectile);
+      break;
+    case GameState::GameOver:
+      this->m_window.draw(this->m_gameOverText);
+      break;
+    default:
+      break;
+  }
   this->m_window.endDraw();
 }
 
@@ -72,6 +108,25 @@ void Game::restartClock()
 }
 
 // Private methods
+void Game::_initText(sf::Text *text)
+{
+  text->setFont(this->m_window.getFont());
+  text->setCharacterSize(32);
+  text->setFillColor(sf::Color::White);
+  text->setStyle(sf::Text::Bold);
+  text->setLineSpacing(1.5f);
+  text->setLetterSpacing(1.5f);
+}
+
+void Game::_loadGame(unsigned int mapNumber)
+{
+  this->m_arena.load(mapNumber);
+  this->_spawnPlayers();
+  this->m_window.setPlayers(this->m_players);
+  this->m_dist = std::uniform_int_distribution<>(0, this->m_arena.getSpaces().size() - 1);
+  this->m_gameState = GameState::Playing;
+}
+
 void Game::_spawnPlayers()
 {
   std::pair<PlayerConfigs, PlayerConfigs> playerConfigs = this->m_arena.getPlayerConfigs();
@@ -132,21 +187,25 @@ void Game::_checkWinCondition()
   std::unique_ptr<Player> &playerOne = this->m_players.first;
   std::unique_ptr<Player> &playerTwo = this->m_players.second;
 
+  if (!playerOne->hasCapturedFlag() &&
+      !playerTwo->hasCapturedFlag() &&
+      playerOne->getHealth() > 0 &&
+      playerTwo->getHealth() > 0)
+    return ;
+  this->m_gameState = GameState::GameOver;
   if ((playerOne->hasCapturedFlag() && playerTwo->hasCapturedFlag()) ||
       (playerOne->getHealth() <= 0 && playerTwo->getHealth() <= 0))
-  {
-    std::cout << "It's a tie!" << std::endl;
-    return ;
-  }
-  if (playerOne->hasCapturedFlag() || playerTwo->getHealth() <= 0)
-  {
-    std::cout << "Player 1 wins!" << std::endl;
-    return ;
-  }
-  if (playerTwo->hasCapturedFlag() || playerOne->getHealth() <= 0)
-  {
-    std::cout << "Player 2 wins!" << std::endl;
-    return ;
-  }
-
+    this->m_gameOverText.setString("It's a tie!\n");
+  else if (playerOne->hasCapturedFlag())
+    this->m_gameOverText.setString("Player 1 wins!\nBy capturing the flag!\n");
+  else if (playerTwo->getHealth() <= 0)
+    this->m_gameOverText.setString("Player 1 wins!\nBy destroying their enemy and all that is dear to them!\n");
+  else if (playerTwo->hasCapturedFlag())
+    this->m_gameOverText.setString("Player 2 wins!\nBy capturing the flag!\n");
+  else if (playerOne->getHealth() <= 0)
+    this->m_gameOverText.setString("Player 2 wins!\nBy destroying their enemy and all that is dear to them!\n");
+  sf::FloatRect textRect = this->m_gameOverText.getLocalBounds();
+  this->m_gameOverText.setPosition(
+    (ARENA_WIDTH - textRect.width) / 2,
+    ARENA_HEIGHT / 2 - textRect.height);
 }
