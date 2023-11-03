@@ -44,10 +44,7 @@ void Tank::updateProjectiles(const Arena &arena)
   for (int index = 0; index < this->m_projectiles.size(); ++index)
   {
     if (this->m_projectiles[index]->checkCollisions(arena))
-    {
       this->deleteProjectile(index);
-      std::cout << "Wall collision" << std::endl;
-    }
   }
   for (auto &projectile : this->m_projectiles)
       projectile->move(1);

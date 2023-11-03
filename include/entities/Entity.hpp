@@ -28,11 +28,9 @@ class Entity : public sf::Drawable, public Collider
     void setRotation(float rotation);
     
   protected:
-    void checkBoundaryCollisions(const Arena &arena);
-    void boundInArena(const Arena &arena);
-    void offsetWallCollisions(std::vector<sf::FloatRect> walls);
-    bool isCollidingBoundary(const Arena &arena) const;
-    bool isCollidingWalls(std::vector<sf::FloatRect> walls);
+    void _checkCollisionsBoundary(const Arena &arena);
+    bool _isCollidingBoundary(const Arena &arena) const;
+    bool _isCollidingWalls(std::vector<sf::FloatRect> walls);
 
     sf::Texture m_texture;
     sf::Sprite m_sprite;
@@ -42,6 +40,8 @@ class Entity : public sf::Drawable, public Collider
 
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void _boundInArena(const Arena &arena);
+    void _offsetWallCollisions(std::vector<sf::FloatRect> walls);
 };
 
 #endif

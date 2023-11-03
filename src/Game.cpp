@@ -34,15 +34,15 @@ void Game::update()
   std::unique_ptr<Player> &playerTwo = this->m_players.second;
 
   this->m_window.update();
-  this->_spawnHeart(true);
   playerOne->update(this->m_arena);
   playerTwo->update(this->m_arena);
   playerOne->checkCollisions(playerTwo, this->m_arena);
   playerTwo->checkCollisions(playerOne, this->m_arena);
-  if (playerOne->checkHeartCollision(this->m_heart))
+  if (playerOne->checkCollisionsHeart(this->m_heart))
     this->_spawnHeart(false);
-  if (playerTwo->checkHeartCollision(this->m_heart))
+  if (playerTwo->checkCollisionsHeart(this->m_heart))
     this->_spawnHeart(false);
+  this->_spawnHeart(true);
 }
 
 void Game::render()
@@ -80,19 +80,23 @@ void Game::_spawnPlayers()
 
 void Game::_spawnHeart(const bool spawn)
 {
-  static sf::Clock localClock;
+  static float seconds;
 
   if (!spawn)
   {
-    localClock.restart();
+    seconds = 0.0f;
     this->m_isHeartSpawned = false;
     this->m_heart.reset();
     return ;
   }
-  if (this->m_isHeartSpawned ||
-      localClock.getElapsedTime().asSeconds() <= 10.0f)
+  seconds += this->m_elapsed.asSeconds();
+  if (this->m_isHeartSpawned || seconds <= 2.0f)
     return ;
   this->m_isHeartSpawned = true;
   this->m_heart = std::unique_ptr<Heart>(
     new Heart(true, this->m_arena.getSpaces()[this->m_dist(this->m_gen)], 2.0f));
+}
+
+void Game::_spawnProjectile(const bool spawn)
+{
 }

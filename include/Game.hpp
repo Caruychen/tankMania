@@ -29,6 +29,7 @@ class Game
 
   private:
     void _spawnHeart(const bool spawn);
+    void _spawnProjectile(const bool spawn);
     void _spawnPlayers();
 
     Window m_window;
