@@ -25,12 +25,14 @@ class Tank : public Entity
       const int &incrementSpeed,
       sf::Time *elapsed);
     ~Tank();
+
+    void shoot();
     std::vector<std::unique_ptr<Projectile>> &getProjectiles(void);
 
   protected:
-    void shoot();
     void updateProjectiles(const Arena &arena);
     void deleteProjectile(int index);
+    void _addAmmo();
 
     Ammunition m_ammunition;
     std::vector<std::unique_ptr<Projectile>> m_projectiles;
