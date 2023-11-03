@@ -4,7 +4,11 @@
 // Constructors & Destructors
 Game::Game(): 
   m_window("Tank Mania!", sf::Vector2u(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)),
-  m_arena(Arena("assets/maps/map_00.txt")),
+  m_arena(Arena({
+    "assets/maps/map_1.txt",
+    "assets/maps/map_2.txt",
+    "assets/maps/map_3.txt",
+    "assets/maps/map_4.txt"})),
   m_isHeartSpawned(false),
   m_isProjectileSpawned(false),
   m_gameState(GameState::Menu),
