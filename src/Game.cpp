@@ -11,6 +11,7 @@ Game::Game():
 {
   this->m_arena.load();
   this->_spawnPlayers();
+  this->m_window.setPlayers(this->m_players);
   this->m_dist = std::uniform_int_distribution<>(0, this->m_arena.getSpaces().size() - 1);
 }
 
