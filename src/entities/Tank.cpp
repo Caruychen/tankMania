@@ -59,7 +59,7 @@ void Tank::deleteProjectile(int index)
 
 void Tank::_initAmmo()
 {
-  float padding = 30;
+  float padding = 10;
   float y = ARENA_HEIGHT + padding;
   float x = ARENA_WIDTH / 2;
   x += this->m_number == 1 ? - padding : padding;

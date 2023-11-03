@@ -103,7 +103,7 @@ void Player::_checkCollisionsProjectile(std::unique_ptr<Player> &other)
     this->_takeDamage();
     this->m_isAlive = false;
     this->setRotation(this->m_spawnRotation);
-    this->setPos(sf::Vector2f(ARENA_WIDTH / 2 + timeoutOffsetX, ARENA_HEIGHT + 20));
+    this->setPos(sf::Vector2f(ARENA_WIDTH / 2 + timeoutOffsetX, ARENA_HEIGHT + 50));
     other->deleteProjectile(index);
     return ;
   }
