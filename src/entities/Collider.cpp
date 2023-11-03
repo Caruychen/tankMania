@@ -73,18 +73,7 @@ Collider Collider::getCollider()
   return *this;
 }
 
-void Collider::offsetWallCollisions(std::vector<sf::FloatRect> walls)
-{
-  if (this->m_spritePtr == nullptr)
-    return;
-  for (sf::FloatRect wall: walls)
-  {
-    Collider wallCollider = Collider(wall);
-    this->offsetCollision(wallCollider);
-  }
-}
-
-const bool Collider::isCollidingGroup(std::vector<Collider> colliders) const
+const bool Collider::isCollidingGroup(std::vector<Collider> colliders)
 {
   if (this->m_spritePtr == nullptr)
     return false;
@@ -105,12 +94,13 @@ void Collider::offsetCollision(const Collider &other)
   this->updateCollider();
 }
 
-const bool Collider::isColliding(const Collider &other, sf::Vector2f *offset) const
+const bool Collider::isColliding(const Collider &other, sf::Vector2f *offset)
 {
   float overlap = INFINITY;
   sf::Vector2f vecDistance;
   float scalarDistance;
 
+  this->updateCollider();
   if (!(this->_intersects(other, &overlap) && other._intersects(*this, &overlap)))
     return false;
   if (offset == nullptr)

@@ -26,17 +26,16 @@ Player::Player(
 Player::~Player()
 {}
 
-void Player::update(void)
+void Player::update(const Arena &arena)
 {
   this->_handleInput();
-  this->updateProjectiles();
+  this->updateProjectiles(arena);
 }
 
 void Player::checkCollisions(
   std::unique_ptr<Player> &other,
   const Arena &arena)
 {
-  this->updateCollider();
   this->offsetCollision(other->getCollider());
   this->checkZoneCollision(other);
   this->checkBoundaryCollisions(arena);
@@ -63,14 +62,14 @@ void Player::checkProjectileCollisions(std::unique_ptr<Player> &other)
   std::vector<std::unique_ptr<Projectile>> &projectiles = other->getProjectiles();
   for (int index = 0; index < projectiles.size(); ++index)
   {
-    if (!this->isColliding(projectiles[index]->getCollider()))
+    Collider collider = projectiles[index]->getCollider();
+    if (!this->isColliding(collider))
       continue;
     this->takeDamage();
     this->setPos(this->m_spawnPos);
     this->setRotation(this->m_spawnRotation);
     other->deleteProjectile(index);
   }
-
 }
 
 void Player::takeDamage()

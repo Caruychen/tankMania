@@ -14,6 +14,7 @@ class Projectile : public Entity
       sf::Time *elapsed);
     ~Projectile();
       
+    bool checkCollisions(const Arena &arena);
   private:
 };
 

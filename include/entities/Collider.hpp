@@ -22,12 +22,11 @@ class Collider
     Collider getCollider();
 
     // Boundary & Collisions
-    void offsetWallCollisions(std::vector<sf::FloatRect> walls);
-    const bool isCollidingGroup(std::vector<Collider> colliders) const;
+    const bool isCollidingGroup(std::vector<Collider> colliders);
     void offsetCollision(const Collider &other);
     const bool isColliding(
       const Collider &other,
-      sf::Vector2f *offset = nullptr) const;
+      sf::Vector2f *offset = nullptr);
 
   private:
     const bool _intersects(const Collider &other, float *overlap) const;

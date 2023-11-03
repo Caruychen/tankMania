@@ -43,7 +43,7 @@ class Player : public Tank
       sf::Time *elapsed);
     ~Player();
 
-    void update(void);
+    void update(const Arena &arena);
     void checkCollisions(std::unique_ptr<Player> &other, const Arena &arena);
     void checkZoneCollision(std::unique_ptr<Player> &other);
     const bool checkHeartCollision(std::unique_ptr<Heart> &heart);

@@ -33,17 +33,24 @@ void Tank::shoot()
   if (this->m_ammunition.ammo.empty())
     return;
   auto &ammo = this->m_ammunition.ammo[0];
-  ammo->setScale(sf::Vector2f(1, 1));
   ammo->setRotation(this->m_sprite.getRotation());
   ammo->setPos(this->m_sprite.getPosition());
   this->m_projectiles.push_back(std::move(ammo));
   this->m_ammunition.ammo.erase(this->m_ammunition.ammo.begin());
 }
 
-void Tank::updateProjectiles()
+void Tank::updateProjectiles(const Arena &arena)
 {
+  for (int index = 0; index < this->m_projectiles.size(); ++index)
+  {
+    if (this->m_projectiles[index]->checkCollisions(arena))
+    {
+      this->deleteProjectile(index);
+      std::cout << "Wall collision" << std::endl;
+    }
+  }
   for (auto &projectile : this->m_projectiles)
-    projectile->move(1);
+      projectile->move(1);
 }
 
 void Tank::deleteProjectile(int index)

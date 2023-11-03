@@ -17,3 +17,8 @@ Projectile::Projectile(
 
 Projectile::~Projectile()
 {}
+
+bool Projectile::checkCollisions(const Arena &arena)
+{
+  return (this->isCollidingBoundary(arena) || this->isCollidingWalls(arena.getWalls()));
+}

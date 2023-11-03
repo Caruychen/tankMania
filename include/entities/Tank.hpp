@@ -29,7 +29,7 @@ class Tank : public Entity
 
   protected:
     void shoot();
-    void updateProjectiles();
+    void updateProjectiles(const Arena &arena);
     void deleteProjectile(int index);
 
     Ammunition m_ammunition;

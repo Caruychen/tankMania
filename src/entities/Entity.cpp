@@ -69,7 +69,6 @@ void Entity::setRotation(float rotation)
 
 void Entity::checkBoundaryCollisions(const Arena &arena)
 {
-  this->updateCollider();
   this->boundInArena(arena);
   this->offsetWallCollisions(arena.getWalls());
 }
@@ -89,6 +88,36 @@ void Entity::boundInArena(const Arena &arena)
     this->m_sprite.setPosition(pos.x, heightOffset);
   else if (spriteBounds.top + spriteBounds.height > arena.getSize().y)
     this->m_sprite.setPosition(pos.x, arena.getSize().y - heightOffset);
+}
+
+void Entity::offsetWallCollisions(std::vector<sf::FloatRect> walls)
+{
+  for (sf::FloatRect wall: walls)
+  {
+    Collider wallCollider = Collider(wall);
+    this->offsetCollision(wallCollider);
+  }
+}
+
+bool Entity::isCollidingBoundary(const Arena &arena) const
+{
+  sf::FloatRect spriteBounds = this->m_sprite.getGlobalBounds();
+  return (
+    spriteBounds.left < 0 ||
+    spriteBounds.top < 0 ||
+    spriteBounds.left + spriteBounds.width > arena.getSize().x ||
+    spriteBounds.top + spriteBounds.height > arena.getSize().y);
+}
+
+bool Entity::isCollidingWalls(std::vector<sf::FloatRect> walls)
+{
+  for (sf::FloatRect wall: walls)
+  {
+    Collider wallCollider = Collider(wall);
+    if (this->isColliding(wallCollider))
+      return true;
+  }
+  return false;
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const

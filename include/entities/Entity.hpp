@@ -30,6 +30,9 @@ class Entity : public sf::Drawable, public Collider
   protected:
     void checkBoundaryCollisions(const Arena &arena);
     void boundInArena(const Arena &arena);
+    void offsetWallCollisions(std::vector<sf::FloatRect> walls);
+    bool isCollidingBoundary(const Arena &arena) const;
+    bool isCollidingWalls(std::vector<sf::FloatRect> walls);
 
     sf::Texture m_texture;
     sf::Sprite m_sprite;
