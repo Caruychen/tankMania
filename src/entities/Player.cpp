@@ -32,7 +32,7 @@ Player::Player(
 Player::~Player()
 {}
 
-void Player::update(const Arena &arena)
+void Player::update(const Arena &arena, std::unique_ptr<Player> &other)
 {
   this->_respawn();
   this->updateProjectiles(arena);
@@ -40,14 +40,6 @@ void Player::update(const Arena &arena)
     return;
   this->_updateFlag();
   this->_handleInput();
-}
-
-void Player::updateCollisions(
-  std::unique_ptr<Player> &other,
-  const Arena &arena)
-{
-  if (!this->m_isAlive)
-    return;
   this->offsetCollision(other->getCollider());
   this->_checkCollision();
   this->_checkCollision(other);

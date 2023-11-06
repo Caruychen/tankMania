@@ -62,10 +62,8 @@ void Game::update()
   std::unique_ptr<Player> &playerTwo = this->m_players.second;
 
   this->_checkWinCondition();
-  playerOne->update(this->m_arena);
-  playerOne->updateCollisions(playerTwo, this->m_arena);
-  playerTwo->update(this->m_arena);
-  playerTwo->updateCollisions(playerOne, this->m_arena);
+  playerOne->update(this->m_arena, playerTwo);
+  playerTwo->update(this->m_arena, playerOne);
   if (playerOne->checkPickup(this->m_heart))
     this->_spawnHeart(false);
   if (playerTwo->checkPickup(this->m_heart))

@@ -45,8 +45,7 @@ class Player : public Tank
       sf::Time *elapsed);
     ~Player();
 
-    void update(const Arena &arena);
-    void updateCollisions(std::unique_ptr<Player> &other, const Arena &arena);
+    void update(const Arena &arena, std::unique_ptr<Player> &other);
     const bool checkPickup(std::unique_ptr<Heart> &heart);
     const bool checkPickup(std::unique_ptr<Projectile> &projectile);
 
