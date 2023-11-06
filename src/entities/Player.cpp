@@ -20,7 +20,8 @@ Player::Player(
   m_spawnPos(configs.spawnPos),
   m_flagPos(configs.flagPos),
   m_zones(configs.zones),
-  m_spawnRotation(configs.spawnRotation)
+  m_spawnRotation(configs.spawnRotation),
+  m_respawnTime(0)
 {
   /* Flag color is opposite to the Player's own color */
   this->_setupKeyBindings();
@@ -49,7 +50,6 @@ void Player::updateCollisions(
     return;
   this->offsetCollision(other->getCollider());
   this->_checkCollisionFlag();
-  this->_checkCollisionsZone();
   this->_checkCollisionsBoundary(arena);
   this->_checkCollisionsProjectile(other);
 }
@@ -124,19 +124,14 @@ void Player::_handleInput(void)
 
 void Player::_checkCollisionFlag(void)
 {
-  if (m_isHoldingFlag)
-    return ;
-  if (this->isColliding(this->m_flag->getCollider()))
-    m_isHoldingFlag = true;
-}
-
-void Player::_checkCollisionsZone()
-{
-  if (this->m_isHoldingFlag && this->isCollidingGroup(this->m_zones))
+  if (this->m_isHoldingFlag)
   {
-    this->m_hasCapturedFlag = true;
+    if (this->isCollidingGroup(this->m_zones))
+      this->m_hasCapturedFlag = true;
     return ;
   }
+  if (this->isColliding(this->m_flag->getCollider()))
+    m_isHoldingFlag = true;
 }
 
 void Player::_checkCollisionsProjectile(std::unique_ptr<Player> &other)
@@ -195,24 +190,22 @@ void Player::_takeDamage()
 
 void Player::_die()
 {
-  const float timeoutOffsetX = m_number == 1 ? -this->getSize().x : this->getSize().x;
+  const float offsetX = m_number == 1 ? -this->getSize().x : this->getSize().x;
   this->setRotation(this->m_spawnRotation);
-  this->setPos(sf::Vector2f(ARENA_WIDTH / 2 + timeoutOffsetX, ARENA_HEIGHT + 50));
+  this->setPos(sf::Vector2f(ARENA_WIDTH / 2 + offsetX, ARENA_HEIGHT + 50));
   this->m_isAlive = false;
 }
 
 void Player::_respawn()
 {
-  static float seconds;
-
   if (this->m_isAlive)
     return ;
-  seconds += this->m_elapsed->asSeconds();
-  if (seconds <= RESPAWN_TIME)
+  this->m_respawnTime += this->m_elapsed->asSeconds();
+  if (this->m_respawnTime <= RESPAWN_TIME)
     return ;
   this->m_isAlive = true;
   this->setPos(this->m_spawnPos);
-  seconds = 0;
+  this->m_respawnTime = 0;
 }
 
 void Player::_updateFlag(void)

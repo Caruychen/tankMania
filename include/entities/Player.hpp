@@ -59,7 +59,6 @@ class Player : public Tank
     void _setupKeyBindings();
     void _handleInput(void);
     void _checkCollisionFlag(void);
-    void _checkCollisionsZone(void);
     void _checkCollisionsProjectile(std::unique_ptr<Player> &other);
     void _initHealth();
     void _addHealth();
@@ -86,6 +85,7 @@ class Player : public Tank
     const std::vector<Collider> m_zones;
     Health m_health;
     std::unique_ptr<Flag> m_flag;
+    float m_respawnTime;
 };
 
 #endif
