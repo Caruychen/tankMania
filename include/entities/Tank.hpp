@@ -13,6 +13,9 @@ struct Ammunition
 {
   unsigned int max;
   std::vector<std::unique_ptr<Projectile>> ammo;
+  sf::Font stateFont;
+  sf::Text stateText;
+
 };
 
 class Tank : public Entity
@@ -40,6 +43,7 @@ class Tank : public Entity
 
   private:
     void _initAmmo();
+    void _initAmmoText();
     const unsigned int m_number;
 };
 

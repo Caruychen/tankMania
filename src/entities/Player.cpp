@@ -242,4 +242,6 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(*ammo, states);
   for (auto &projectile : this->m_projectiles)
     target.draw(*projectile, states);
+  if (this->m_ammunition.ammo.size() >= this->m_health.max)
+    target.draw(this->m_ammunition.stateText);
 }

@@ -1,4 +1,5 @@
 #include "Constants.hpp"
+#include <iostream>
 #include "Tank.hpp"
 
 Tank::Tank(
@@ -18,6 +19,7 @@ Tank::Tank(
   m_number(number)
 {
   this->_initAmmo();
+  this->_initAmmoText();
 }
 
 Tank::~Tank()
@@ -70,7 +72,7 @@ void Tank::_addAmmo()
   float padding = AMMO_DISPLAY_PADDING;
   float y = ARENA_HEIGHT + padding;
   float x = ARENA_WIDTH / 2;
-  x += this->m_number == 1 ? -padding * (ammoCount + 1): padding* (ammoCount + 1);
+  x += this->m_number == 1 ? -padding * (ammoCount + 1): padding * (ammoCount + 1);
   this->m_ammunition.ammo.push_back(
     std::make_unique<Projectile>(sf::Vector2f(x, y), 0, this->m_elapsed));
 }
@@ -79,4 +81,21 @@ void Tank::_initAmmo()
 {
   this->m_ammunition.max = MAX_AMMO;
   this->_addAmmo();
+}
+
+void Tank::_initAmmoText()
+{
+  sf::Text *text = &this->m_ammunition.stateText;
+
+  if(!this->m_ammunition.stateFont.loadFromFile("assets/fonts/ArcadeClassic.ttf"))
+    throw std::runtime_error("Could not load font");
+  text->setString("Max Reached!");
+  text->setCharacterSize(14);
+  text->setFont(this->m_ammunition.stateFont);
+  text->setFillColor(sf::Color::White);
+  sf::FloatRect textRect = text->getLocalBounds();
+  float x = this->m_number == 1 ?
+    ARENA_WIDTH / 2 - textRect.width - 6:
+    ARENA_WIDTH / 2 + 6;
+  text->setPosition(x, ARENA_HEIGHT + AMMO_DISPLAY_PADDING + 1);
 }
