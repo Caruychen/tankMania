@@ -1,0 +1,11 @@
+#ifndef CONSTANTS_HPP
+# define CONSTANTS_HPP
+
+# define DEFAULT_WINDOW_WIDTH 1200
+# define DEFAULT_WINDOW_HEIGHT 675
+# define FRAME_RATE_LIMIT 60
+
+# define ARENA_WIDTH 1200
+# define ARENA_HEIGHT 600
+
+#endif
