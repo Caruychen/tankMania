@@ -3,9 +3,6 @@
 
 # include <SFML/Graphics.hpp>
 # include "Player.hpp"
-# define DEFAULT_WINDOW_WIDTH 1200
-# define DEFAULT_WINDOW_HEIGHT 675
-# define FRAME_RATE_LIMIT 60
 
 class Window
 {

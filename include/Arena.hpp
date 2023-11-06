@@ -4,9 +4,6 @@
 # include <SFML/Graphics.hpp>
 # include "Collider.hpp"
 
-# define ARENA_WIDTH 1200
-# define ARENA_HEIGHT 600
-
 enum class TileType
 {
     EMPTY = 0,
