@@ -1,5 +1,5 @@
+#include "Constants.hpp"
 #include "Player.hpp"
-#include <iostream>
 
 Player::Player(
   const unsigned int &number,

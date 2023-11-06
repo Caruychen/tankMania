@@ -19,6 +19,7 @@ set(HEADER_FILES
   include/Window.hpp
   include/Game.hpp
   include/Arena.hpp
+  include/Constants.hpp
   include/entities/Collider.hpp
   include/entities/Entity.hpp
   include/entities/Tank.hpp
