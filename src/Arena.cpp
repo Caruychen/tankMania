@@ -78,6 +78,11 @@ void  Arena::_readMap(const std::string& mapFile)
   {
     if (buffer[0] == '\n')
       continue;
+    if (buffer[0] - '0' > 7 || buffer[0] < '0')
+    {
+      this->m_data.push_back(0);
+      continue;
+    }
     this->m_data.push_back(buffer[0] - '0');
   }
   this->m_heightInTiles = sqrt(this->m_data.size() / 2);
