@@ -1,3 +1,4 @@
+#include "Constants.hpp"
 #include "Arena.hpp"
 #include <cmath>
 
@@ -133,6 +134,9 @@ void Arena::_loadBounds(void)
   this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH, 1)));
   this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH, ARENA_HEIGHT)));
   this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 3 * 2, ARENA_HEIGHT)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 2, ARENA_HEIGHT)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 2, DEFAULT_WINDOW_HEIGHT)));
+  this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 2, ARENA_HEIGHT)));
   this->m_bounds.append(sf::Vertex(sf::Vector2f(ARENA_WIDTH / 3, ARENA_HEIGHT)));
   this->m_bounds.append(sf::Vertex(sf::Vector2f(1, ARENA_HEIGHT)));
   this->m_bounds.append(sf::Vertex(sf::Vector2f(1, 1)));
@@ -142,9 +146,12 @@ void Arena::_loadBounds(void)
   this->m_bounds[3].color = sf::Color::Red;
   this->m_bounds[4].color = sf::Color::Red;
   this->m_bounds[5].color = sf::Color::Red;
-  this->m_bounds[6].color = sf::Color::Blue;
-  this->m_bounds[7].color = sf::Color::Blue;
-  this->m_bounds[8].color = sf::Color::Blue;
+  this->m_bounds[6].color = sf::Color::Magenta;
+  this->m_bounds[7].color = sf::Color::Magenta;
+  this->m_bounds[8].color = sf::Color::Magenta;
+  this->m_bounds[9].color = sf::Color::Blue;
+  this->m_bounds[10].color = sf::Color::Blue;
+  this->m_bounds[11].color = sf::Color::Blue;
 }
 
 void Arena::_loadObjects(void)
