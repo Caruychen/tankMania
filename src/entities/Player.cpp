@@ -49,12 +49,12 @@ void Player::updateCollisions(
   if (!this->m_isAlive)
     return;
   this->offsetCollision(other->getCollider());
-  this->_checkCollisionFlag();
+  this->_checkCollision();
   this->_checkCollisionsBoundary(arena);
-  this->_checkCollisionsProjectile(other);
+  this->_checkCollision(other);
 }
 
-const bool Player::checkCollisionsPickup(std::unique_ptr<Heart> &heart)
+const bool Player::checkPickup(std::unique_ptr<Heart> &heart)
 {
   if (heart == nullptr)
     return false;
@@ -65,7 +65,7 @@ const bool Player::checkCollisionsPickup(std::unique_ptr<Heart> &heart)
   return (this->_addHealth(), true);
 }
 
-const bool Player::checkCollisionsPickup(std::unique_ptr<Projectile> &projectile)
+const bool Player::checkPickup(std::unique_ptr<Projectile> &projectile)
 {
   if (projectile == nullptr)
     return false;
@@ -86,15 +86,6 @@ const sf::Keyboard::Key Player::getShootKey(void) const
   return this->m_shoot;
 }
 
-void Player::_setupKeyBindings()
-{
-  this->m_forward = m_number == 1 ? (sf::Keyboard::Key) P1::UP : (sf::Keyboard::Key) P2::UP;
-  this->m_backward = m_number == 1 ? (sf::Keyboard::Key) P1::DOWN : (sf::Keyboard::Key) P2::DOWN;
-  this->m_left = m_number == 1 ? (sf::Keyboard::Key) P1::LEFT : (sf::Keyboard::Key) P2::LEFT;
-  this->m_right = m_number == 1 ? (sf::Keyboard::Key) P1::RIGHT : (sf::Keyboard::Key) P2::RIGHT;
-  this->m_shoot = m_number == 1 ? (sf::Keyboard::Key) P1::SHOOT : (sf::Keyboard::Key) P2::SHOOT;
-}
-
 const unsigned int Player::getHealth(void) const
 {
   return this->m_health.current;
@@ -110,6 +101,15 @@ const bool Player::hasCapturedFlag(void) const
   return this->m_hasCapturedFlag;
 }
 
+void Player::_setupKeyBindings()
+{
+  this->m_forward = m_number == 1 ? (sf::Keyboard::Key) P1::UP : (sf::Keyboard::Key) P2::UP;
+  this->m_backward = m_number == 1 ? (sf::Keyboard::Key) P1::DOWN : (sf::Keyboard::Key) P2::DOWN;
+  this->m_left = m_number == 1 ? (sf::Keyboard::Key) P1::LEFT : (sf::Keyboard::Key) P2::LEFT;
+  this->m_right = m_number == 1 ? (sf::Keyboard::Key) P1::RIGHT : (sf::Keyboard::Key) P2::RIGHT;
+  this->m_shoot = m_number == 1 ? (sf::Keyboard::Key) P1::SHOOT : (sf::Keyboard::Key) P2::SHOOT;
+}
+
 void Player::_handleInput(void)
 {
   if (sf::Keyboard::isKeyPressed(this->m_forward))
@@ -122,7 +122,7 @@ void Player::_handleInput(void)
     this->rotate(1);
 }
 
-void Player::_checkCollisionFlag(void)
+void Player::_checkCollision(void)
 {
   if (this->m_isHoldingFlag)
   {
@@ -134,7 +134,7 @@ void Player::_checkCollisionFlag(void)
     m_isHoldingFlag = true;
 }
 
-void Player::_checkCollisionsProjectile(std::unique_ptr<Player> &other)
+void Player::_checkCollision(std::unique_ptr<Player> &other)
 {
   std::vector<std::unique_ptr<Projectile>> &projectiles = other->getProjectiles();
   for (int index = 0; index < projectiles.size(); ++index)

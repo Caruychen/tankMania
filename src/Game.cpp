@@ -66,14 +66,14 @@ void Game::update()
   playerTwo->update(this->m_arena);
   playerOne->updateCollisions(playerTwo, this->m_arena);
   playerTwo->updateCollisions(playerOne, this->m_arena);
-  if (playerOne->checkCollisionsPickup(this->m_heart))
+  if (playerOne->checkPickup(this->m_heart))
     this->_spawnHeart(false);
-  if (playerTwo->checkCollisionsPickup(this->m_heart))
+  if (playerTwo->checkPickup(this->m_heart))
     this->_spawnHeart(false);
   this->_spawnHeart(true);
-  if (playerOne->checkCollisionsPickup(this->m_projectile))
+  if (playerOne->checkPickup(this->m_projectile))
     this->_spawnProjectile(false);
-  if (playerTwo->checkCollisionsPickup(this->m_projectile))
+  if (playerTwo->checkPickup(this->m_projectile))
     this->_spawnProjectile(false);
   this->_spawnProjectile(true);
 }
