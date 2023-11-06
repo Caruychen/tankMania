@@ -35,11 +35,6 @@ const bool Game::running() const
   return !this->m_window.isDone();
 }
 
-sf::Time Game::getElapsed()
-{
-  return this->m_elapsed;
-}
-
 // Public Functions
 void Game::update()
 {

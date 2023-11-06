@@ -30,7 +30,6 @@ class Game
 
     // Accessors
     const bool running() const;
-    sf::Time getElapsed();
 
     // Functions
     void update();
