@@ -7,7 +7,6 @@ class Projectile : public Entity
 {
   public:
     Projectile(
-      unsigned int type,
       const sf::Vector2f &pos,
       const float &rotation,
       sf::Time *elapsed = nullptr);

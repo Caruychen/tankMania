@@ -27,6 +27,7 @@ class Entity : public sf::Drawable, public Collider
     void setPos(sf::Vector2f pos);
     void setRotation(float rotation);
     sf::Vector2f getSize() const;
+    sf::Vector2f getPos() const;
     
   protected:
     void _checkCollisionsBoundary(const Arena &arena);

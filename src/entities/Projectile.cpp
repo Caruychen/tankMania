@@ -1,12 +1,11 @@
 #include "Projectile.hpp"
 
 Projectile::Projectile(
-  unsigned int type,
   const sf::Vector2f &pos,
   const float &rotation,
   sf::Time *elapsed) :
   Entity(
-    "assets/projectiles/bullet" + std::to_string(type) + ".png",
+    "assets/projectiles/bullet1.png",
     pos,
     rotation,
     sf::Vector2f(1.f, 1.f),

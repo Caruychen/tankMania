@@ -179,7 +179,7 @@ void Game::_spawnProjectile(const bool spawn)
   this->m_isProjectileSpawned = true;
   this->m_projectile = std::unique_ptr<Projectile>(
     new Projectile(
-      1, this->m_arena.getSpaces()[this->m_dist(this->m_gen)],0));
+      this->m_arena.getSpaces()[this->m_dist(this->m_gen)],0));
 }
 
 void Game::_checkWinCondition()

@@ -30,9 +30,13 @@ void Tank::shoot()
   auto &ammo = this->m_ammunition.ammo[0];
   ammo->setRotation(this->m_sprite.getRotation());
   ammo->setPos(this->m_sprite.getPosition());
-
   this->m_projectiles.push_back(std::move(ammo));
   this->m_ammunition.ammo.erase(this->m_ammunition.ammo.begin());
+  for (auto &ammo : this->m_ammunition.ammo)
+  {
+    sf::Vector2f currentPos = ammo->getPos();
+    ammo->setPos({currentPos.x - AMMO_DISPLAY_PADDING, currentPos.y});
+  }
 }
 
 std::vector<std::unique_ptr<Projectile>> &Tank::getProjectiles()
@@ -68,7 +72,7 @@ void Tank::_addAmmo()
   float x = ARENA_WIDTH / 2;
   x += this->m_number == 1 ? -padding * (ammoCount + 1): padding* (ammoCount + 1);
   this->m_ammunition.ammo.push_back(
-    std::make_unique<Projectile>(1, sf::Vector2f(x, y), 0, this->m_elapsed));
+    std::make_unique<Projectile>(sf::Vector2f(x, y), 0, this->m_elapsed));
 }
 
 void Tank::_initAmmo()
