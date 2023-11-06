@@ -47,6 +47,7 @@ class Game
     Window m_window;
     Arena m_arena;
     GameState m_gameState;
+    sf::Font m_font;
     sf::Text m_gameOverText;
     sf::Text m_menuText;
     sf::Clock m_clock;

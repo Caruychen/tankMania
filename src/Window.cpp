@@ -10,8 +10,6 @@ Window::Window() :
   m_isDone(false),
   m_players(nullptr)
 {
-  if(!this->m_font.loadFromFile("assets/fonts/ArcadeClassic.ttf"))
-    throw std::runtime_error("Could not load font");
   this->_create();
 }
 
@@ -22,8 +20,6 @@ Window::Window(const std::string &title, const sf::Vector2u &size) :
   m_isDone(false),
   m_players(nullptr)
 {
-  if(!this->m_font.loadFromFile("assets/fonts/ArcadeClassic.ttf"))
-    throw std::runtime_error("Could not load font");
   this->_create();
 }
 
@@ -99,11 +95,6 @@ const sf::Vector2u Window::getSize() const
 void Window::setPlayers(const std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> &players)
 {
   this->m_players = &players;
-}
-
-sf::Font &Window::getFont()
-{
-  return this->m_font;
 }
 
 const bool Window::isDone() const

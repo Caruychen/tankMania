@@ -23,7 +23,6 @@ class Window
     // Accessors
     const sf::Vector2u getSize() const;
     void setPlayers(const std::pair<std::unique_ptr<Player>, std::unique_ptr<Player>> &players);
-    sf::Font &getFont();
     const bool isDone() const;
     const bool isFullScreen() const;
 
@@ -32,7 +31,6 @@ class Window
     void _destroy();
 
     sf::RenderWindow m_window;
-    sf::Font m_font;
     std::string m_windowTitle;
     sf::Vector2u m_windowSize;
     bool m_isDone;

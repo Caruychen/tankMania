@@ -15,6 +15,8 @@ Game::Game():
   m_gameState(GameState::Menu),
   m_gen(m_rd())
 {
+  if(!this->m_font.loadFromFile("assets/fonts/ArcadeClassic.ttf"))
+    throw std::runtime_error("Could not load font");
   this->_initText(&this->m_menuText);
   this->_initText(&this->m_gameOverText);
   this->m_menuText.setString(
@@ -110,7 +112,7 @@ void Game::restartClock()
 // Private methods
 void Game::_initText(sf::Text *text)
 {
-  text->setFont(this->m_window.getFont());
+  text->setFont(this->m_font);
   text->setCharacterSize(32);
   text->setFillColor(sf::Color::White);
   text->setStyle(sf::Text::Bold);
