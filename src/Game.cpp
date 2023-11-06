@@ -63,8 +63,8 @@ void Game::update()
 
   this->_checkWinCondition();
   playerOne->update(this->m_arena);
-  playerTwo->update(this->m_arena);
   playerOne->updateCollisions(playerTwo, this->m_arena);
+  playerTwo->update(this->m_arena);
   playerTwo->updateCollisions(playerOne, this->m_arena);
   if (playerOne->checkPickup(this->m_heart))
     this->_spawnHeart(false);

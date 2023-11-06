@@ -50,8 +50,8 @@ void Player::updateCollisions(
     return;
   this->offsetCollision(other->getCollider());
   this->_checkCollision();
-  this->_checkCollisionsBoundary(arena);
   this->_checkCollision(other);
+  Entity::_checkCollision(arena);
 }
 
 const bool Player::checkPickup(std::unique_ptr<Heart> &heart)
