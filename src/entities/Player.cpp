@@ -1,5 +1,6 @@
 #include "Constants.hpp"
 #include "Player.hpp"
+#include <iostream>
 
 Player::Player(
   const unsigned int &number,
@@ -66,6 +67,13 @@ const bool Player::checkPickup(std::unique_ptr<Projectile> &projectile)
   if (this->m_ammunition.ammo.size() >= this->m_health.max)
     return false;
   return (this->_addAmmo(), true);
+}
+
+void Player::shoot(void)
+{
+  if (!this->m_isAlive)
+    return;
+  Tank::shoot();
 }
 
 std::vector<Collider> Player::getZones() const

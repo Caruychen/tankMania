@@ -48,6 +48,7 @@ class Player : public Tank
     void update(const Arena &arena, std::unique_ptr<Player> &other);
     const bool checkPickup(std::unique_ptr<Heart> &heart);
     const bool checkPickup(std::unique_ptr<Projectile> &projectile);
+    void shoot(void);
 
     std::vector<Collider> getZones(void) const;
     const sf::Keyboard::Key getShootKey(void) const;
