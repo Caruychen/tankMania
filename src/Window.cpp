@@ -1,12 +1,10 @@
 #include "Constants.hpp"
 #include "Window.hpp"
-#include <iostream>
 
 // Constructors & Destructors
 Window::Window() :
   m_windowTitle("Window"),
   m_windowSize(sf::Vector2u(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)),
-  m_isFullScreen(false),
   m_isDone(false),
   m_players(nullptr)
 {
@@ -16,7 +14,6 @@ Window::Window() :
 Window::Window(const std::string &title, const sf::Vector2u &size) :
   m_windowTitle(title),
   m_windowSize(size),
-  m_isFullScreen(false),
   m_isDone(false),
   m_players(nullptr)
 {
@@ -51,8 +48,6 @@ void Window::pollEvents(unsigned int *mapNumber)
         this->m_isDone = true;
         break;
       case sf::Event::KeyPressed:
-        if (event.key.code == sf::Keyboard::F5)
-          this->toggleFullScreen();
         if (event.key.code == sf::Keyboard::Num1)
           *mapNumber = 1;
         if (event.key.code == sf::Keyboard::Num2)
@@ -72,13 +67,6 @@ void Window::pollEvents(unsigned int *mapNumber)
         break;
     }
   }
-}
-
-void Window::toggleFullScreen()
-{
-  this->m_isFullScreen = !this->m_isFullScreen;
-  this->_destroy();
-  this->_create();
 }
 
 void Window::draw(sf::Drawable &drawable)
@@ -102,19 +90,14 @@ const bool Window::isDone() const
   return this->m_isDone;
 }
 
-const bool Window::isFullScreen() const
-{
-  return this->m_isFullScreen;
-}
 
 // Private methods
 void Window::_create()
 {
-  auto style = (this->m_isFullScreen ? sf::Style::Fullscreen : sf::Style::Default);
   this->m_window.create(
     sf::VideoMode(this->m_windowSize.x, this->m_windowSize.y),
     this->m_windowTitle,
-    style
+    sf::Style::Default
   );
   this->m_window.setFramerateLimit(FRAME_RATE_LIMIT);
 }
