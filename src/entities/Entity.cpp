@@ -79,7 +79,7 @@ sf::Vector2f Entity::getPos() const
   return this->m_sprite.getPosition();
 }
 
-void Entity::_checkCollision(const Arena &arena)
+void Entity::_offsetArenaCollision(const Arena &arena)
 {
   this->_boundInArena(arena);
   this->_offsetWallCollisions(arena.getWalls());

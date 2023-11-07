@@ -41,9 +41,9 @@ void Player::update(const Arena &arena, std::unique_ptr<Player> &other)
   this->_updateFlag();
   this->_handleInput();
   this->offsetCollision(other->getCollider());
+  this->_offsetArenaCollision(arena);
   this->_checkCollision();
   this->_checkCollision(other);
-  Entity::_checkCollision(arena);
 }
 
 const bool Player::checkPickup(std::unique_ptr<Heart> &heart)
