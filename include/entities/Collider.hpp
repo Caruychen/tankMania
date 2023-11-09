@@ -1,5 +1,6 @@
 #ifndef COLLIDER_HPP
 # define COLLIDER_HPP
+# define _USE_MATH_DEFINES
 
 # include <SFML/Graphics.hpp>
 
