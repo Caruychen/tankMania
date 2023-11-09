@@ -1,5 +1,6 @@
 #ifndef ENTITY_HPP
 # define ENTITY_HPP
+# define _USE_MATH_DEFINES
 
 # include <string>
 # include <SFML/Graphics.hpp>

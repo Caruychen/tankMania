@@ -1,5 +1,5 @@
 #include "Entity.hpp"
-#include <iostream>
+#include <cmath>
 
 Entity::Entity(
   const std::string &texturePath,
@@ -16,7 +16,7 @@ Entity::Entity(
   * This assuees that the texture is a square
    * */
   if (!this->m_texture.loadFromFile(texturePath))
-    std::cerr << "Error loading texture: " << texturePath << std::endl;
+    throw std::runtime_error("Could not open file! " + texturePath);
   int size = std::min(this->m_texture.getSize().x, this->m_texture.getSize().y);
   this->m_sprite.setTextureRect(sf::IntRect(0, 0, size, size));
   this->m_sprite.setTexture(this->m_texture);
