@@ -1,6 +1,7 @@
 #ifndef TANK_HPP
 # define TANK_HPP
 
+# include <memory>
 # include "Entity.hpp"
 # include "Projectile.hpp"
 
