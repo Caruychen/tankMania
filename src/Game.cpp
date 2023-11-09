@@ -22,11 +22,14 @@ Game::Game():
   this->m_menuText.setString(
     "Welcome to Tank Mania!\n\n" \
     "Press 1  2  3  or  4  to open an arena\n" \
-    "Press F5 to toggle fullscreen\n");
+    "Capture the flag or destroy your enemy!\n\n"\
+    "Player 1 moves with WASD and shoots with Q\n"\
+    "Player 2 moves with the arrow keys and shoots with Space\n"\
+    "Everyone starts with 1 bullet and must pick up bullets to shoot");
   sf::FloatRect textRect = this->m_menuText.getLocalBounds();
   this->m_menuText.setPosition(
     (ARENA_WIDTH - textRect.width) / 2,
-    ARENA_HEIGHT / 2 - textRect.height);
+    (ARENA_HEIGHT - textRect.height) / 2);
 }
 
 Game::~Game()
