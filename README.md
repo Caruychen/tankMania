@@ -4,6 +4,8 @@ A Simple 2D Top Down Tank game for 2 players. Made with C++ using the SFML Libra
 
 Players compete for dominance in an all out tank battle! Either capture the opponent's flag, or destroy the opponent.
 
+![Tank Mania Screenshot](https://github.com/Caruychen/tankMania/blob/master/img/tankMania.png)
+
 ## How to Run
 
 You will need to generate the binary for your system first before running the game.
